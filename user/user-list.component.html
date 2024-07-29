@@ -1,0 +1,67 @@
+<div *ngIf="userViewPermissionObj[0] || userViewPermissionObj[1]">
+  <mat-card class="clsCustomZeroPadding">
+    <div fxLayout="row" fxFlex="100" fxLayoutAlign="start center">
+      <mat-card-title class="clsCustomMatCardTitle mb-0">{{'Manage Users' |translate}}</mat-card-title>
+    </div>
+  </mat-card>
+  <mat-card class="clsCustomZeroPadding">
+    <div class="search-bar" fxFlex>
+      <form class="clsCustomSearch">
+        <mat-icon title="{{'Search'|translate}}">search</mat-icon>
+        <input type="text" placeholder="{{'Search'|translate}}" autofocus="true" (keyup)='filter($event.target.value)' />
+      </form>
+    </div>
+  </mat-card>
+  <mat-card class="clsCustomZeroPadding">
+    <mat-card-content>
+      <table mat-table [dataSource]="userTblList" class="clsCustomFullWidth" matSort matSortActive="firstname" matSortDirection="asc">
+        <ng-container matColumnDef="firstname">
+          <th width="200" mat-header-cell *matHeaderCellDef mat-sort-header> {{'Name'|translate}} </th>
+          <td width="200" mat-cell *matCellDef="let user">
+            {{user.firstname}} {{user.lastname}}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="email_address">
+          <th width="200" mat-header-cell *matHeaderCellDef mat-sort-header> {{'Email'|translate}} </th>
+          <td width="200" mat-cell *matCellDef="let user">{{user.email_address}}</td>
+        </ng-container>
+        <ng-container matColumnDef="is_active">
+          <th width="150" mat-header-cell *matHeaderCellDef mat-sort-header> {{'Status'|translate}} </th>
+          <td width="150" mat-cell *matCellDef="let user">
+            <span *ngIf="user.is_active">Active</span>
+            <span *ngIf="!user.is_active">Inactive</span>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="Actions">
+          <th width="150" mat-header-cell *matHeaderCellDef mat-sort-header> {{'Actions'|translate}} </th>
+          <td width="150" mat-cell *matCellDef="let user; let i = index;">
+            <button mat-icon-button title="{{'Edit'|translate}}" (click)="open('edit',user)" *ngIf="userViewPermissionObj[0] || userViewPermissionObj[3]">
+              <mat-icon class="md-20">edit</mat-icon>
+            </button>
+            <button mat-icon-button title="{{'Delete'|translate}}" (click)="delete(user)" *ngIf="userViewPermissionObj[0] || userViewPermissionObj[4]">
+              <mat-icon>delete</mat-icon>
+            </button>
+            <button [matMenuTriggerFor]="actionsMenu" title="{{'Actions'|translate}}" mat-icon-button *ngIf="userViewPermissionObj[0] || userViewPermissionObj[7]" (click)='hidesetPermissionOption(user)'>
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #actionsMenu="matMenu" xPosition="before">
+              <button mat-menu-item (click)="open('changePwd',user)" *ngIf="(userViewPermissionObj[0] || userViewPermissionObj[7]) && user.is_active">{{'Change Password'|translate}}</button>
+              <button mat-menu-item (click)="open('permission',user)" *ngIf= "user.user_id != companyAdminUserId && userViewPermissionObj[0] && user.is_active && 'Company User' == userRole ">{{'Permission'|translate}}</button>
+              <button mat-menu-item (click)="resendEmail(user)" *ngIf="user.user_id != companyAdminUserId && !user.is_active">{{'Resend Email'| translate}}</button>
+            </mat-menu>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="userDisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let user; columns: userDisplayedColumns;">
+        </tr>
+      </table>
+      <div class="clsCustomTblNoRecordsMsg" *ngIf="!userTblList">
+        <span>{{'No records found'|translate}}</span>
+      </div>
+      <mat-paginator style="display: flex; align-items: left;" [pageSizeOptions]="tableConfig['pageSizeOptions']"></mat-paginator>
+    </mat-card-content>
+  </mat-card>
+  <button mat-fab color="warn" title="{{'Add'| translate}}" class="mat-fab-bottom-right" (click)="open('add')" *ngIf="userViewPermissionObj[0] || userViewPermissionObj[2]">
+    <mat-icon>add</mat-icon>
+  </button>
+</div>
