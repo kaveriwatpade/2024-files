@@ -1,0 +1,199 @@
+<div fxLayout="row wrap">
+  <div fxFlex.gt-sm="20" fxFlex.gt-xs="20" fxFlex="100">
+    <mat-card class="clsCustomZeroPadding card-widget clsDarkBlueGrey">
+
+      <div *ngIf="loader" class="loader-container">
+        <mat-progress-bar class="loader" mode="indeterminate"></mat-progress-bar>
+        <p fxLayoutAlign="center center">Please wait.</p>
+        <p fxLayoutAlign="center end" class="info-text">*Readings based on data from last 30 mins*</p>
+      </div>
+
+      <div *ngIf="!loader" mat-card-widget>
+        <div mat-card-float-icon>
+          <mat-icon title="{{'Company'|translate}}">business</mat-icon>
+        </div>
+        <div class="pl-0">
+          <h2 mat-card-widget-title>{{dashboardDataObj['partnerCompanyCnt']}}</h2>
+          <p>{{'Company'|translate}}</p>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+  <div fxFlex.gt-sm="20" fxFlex.gt-xs="20" fxFlex="100">
+    <mat-card class="clsCustomZeroPadding card-widget clsDarkBlueGrey">
+
+      <div *ngIf="loader" class="loader-container">
+        <mat-progress-bar class="loader" mode="indeterminate"></mat-progress-bar>
+        <p fxLayoutAlign="center center">Please wait.</p>
+        <p fxLayoutAlign="center end" class="info-text">*Readings based on data from last 30 mins*</p>
+      </div>
+
+      <div *ngIf="!loader" fxLayoutAlign="space-between" mat-card-widget>
+
+        <div class="pl-0">
+          <h2 mat-card-widget-title>{{dashboardDataObj['partnerCompanyNodeCnt']}}</h2>
+          <p>{{'Total Nodes'|translate}}</p>
+        </div>
+        <div class="pl-0 Card-node">
+          <h2 fxLayoutAlign="end" mat-card-widget-title>{{dashboardDataObj['partnerCompanyConnectedNodes']}}</h2>
+          <p>{{'Connected Nodes'|translate}}</p>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+
+  <div fxFlex.gt-sm="20" fxFlex.gt-xs="20" fxFlex="100">
+    <mat-card class="clsCustomZeroPadding card-widget clsBlueGrey card-hover">
+
+      <!-- <span class="hover-text clsBlueGrey">Readings based on data from last 30 mins</span> -->
+
+      <div *ngIf="loader" class="loader-container">
+        <mat-progress-bar class="loader" mode="indeterminate"></mat-progress-bar>
+        <p fxLayoutAlign="center center">Please wait.</p>
+        <p fxLayoutAlign="center end" class="info-text">*Readings based on data from last 30 mins*</p>
+      </div>
+
+      <div *ngIf="!loader" class="dashboardCardTitle" fxLayoutAlign="space-between" mat-card-widget>
+
+        <div class="pl-0">
+          <h2 mat-card-widget-title>{{dashboardDataObj['nodeData']['totalEnergy']}}</h2>
+          <p>{{'Total Today Energy'|translate}}</p>
+        </div>
+        <div class="pl-0">
+          <h2 fxLayoutAlign="end" mat-card-widget-title>{{dashboardDataObj['nodeData']['totalEnergyNode']}}</h2>
+          <p>{{'Nodes'|translate}}</p>
+        </div>
+      </div>
+      <!-- <div fxLayoutAlign = "center center"class="dashboardCardInfo" mat-card-widget>
+        <mat-icon fxLayoutAlign = "center center" class="info-icon" title="{{'Info'|translate}}">info_outline</mat-icon> 
+        <p fxLayoutAlign = "center center">Readings based on data from last 30 mins</p>
+       </div> -->
+    </mat-card>
+  </div>
+
+  <div fxFlex.gt-sm="20" fxFlex.gt-xs="20" fxFlex="100">
+    <mat-card class="clsCustomZeroPadding card-widget clsDarkBlueGrey card-hover">
+
+      <!-- <span class="hover-text clsDarkBlueGrey">Readings based on data from last 30 mins</span> -->
+
+      <div *ngIf="loader" class="loader-container">
+        <mat-progress-bar class="loader" mode="indeterminate"></mat-progress-bar>
+        <p fxLayoutAlign="center center">Please wait.</p>
+        <p fxLayoutAlign="center end" class="info-text">*Readings based on data from last 30 mins*</p>
+      </div>
+
+      <div *ngIf="!loader" class="dashboardCardTitle" fxLayoutAlign="space-between" mat-card-widget>
+
+
+        <div class="pl-0">
+          <h2 mat-card-widget-title>{{dashboardDataObj['nodeData']['totalPosWattSum']}}</h2>
+          <p>{{'Total Forward Watt Sum'|translate}}</p>
+        </div>
+        <div class="pl-0">
+          <h2 fxLayoutAlign="end" mat-card-widget-title>{{dashboardDataObj['nodeData']['totalPosWattNode']}}</h2>
+          <p>{{'Nodes'|translate}}</p>
+        </div>
+      </div>
+
+      <!-- <div fxLayoutAlign = "center center"class="dashboardCardInfo" mat-card-widget>
+        <mat-icon fxLayoutAlign = "center center" class="info-icon" title="{{'Info'|translate}}">info_outline</mat-icon> 
+        <p fxLayoutAlign = "center center">Calculations based on data from last 30 mins</p>
+       </div> -->
+    </mat-card>
+  </div>
+
+  <div fxFlex.gt-sm="20" fxFlex.gt-xs="20" fxFlex="100">
+    <mat-card class="clsCustomZeroPadding card-widget clsBlueGrey card-hover">
+
+      <!-- <span class="hover-text clsBlueGrey">Readings based on data from last 30 mins</span> -->
+
+
+      <div *ngIf="loader" class="loader-container">
+        <mat-progress-bar class="loader" mode="indeterminate"></mat-progress-bar>
+        <p fxLayoutAlign="center center">Please wait.</p>
+        <p fxLayoutAlign="center end" class="info-text">*Readings based on data from last 30 mins*</p>
+      </div>
+      <div *ngIf="!loader" class="dashboardCardTitle" fxLayoutAlign="space-between" mat-card-widget>
+
+        <div class="pl-0">
+          <h2 mat-card-widget-title>{{dashboardDataObj['nodeData']['totalNagWattSum']}}</h2>
+          <p>{{'Total Reverse Watt Sum'|translate}}</p>
+        </div>
+        <div class="pl-0">
+          <h2 fxLayoutAlign="end" mat-card-widget-title>{{dashboardDataObj['nodeData']['totalNagWattNode']}}</h2>
+          <p>{{'Nodes'|translate}}</p>
+        </div>
+      </div>
+
+      <!-- <div fxLayoutAlign = "center center"class="dashboardCardInfo" mat-card-widget>
+       <mat-icon fxLayoutAlign = "center center" class="info-icon" title="{{'Info'|translate}}">info_outline</mat-icon> 
+       <p fxLayoutAlign = "center center">Calculations based on data from last 30 mins</p>
+      </div> -->
+
+    </mat-card>
+  </div>
+</div>
+
+<div fxLayout="row wrap" fxLayoutAlign="start center" class="clsListWithSearchContainer">
+  <div fxFlex="98">
+    <mat-card class="clsCustomZeroPadding">
+      <div class="search-bar">
+        <form class="clsCustomSearch">
+          <mat-icon title="{{'Search'|translate}}">search</mat-icon>
+          <input type="text" placeholder="{{'Search'|translate}}" autofocus="true"
+            (keyup)='updateFilter($event.target.value)' />
+        </form>
+      </div>
+    </mat-card>
+  </div>
+  <div fxFlex="2">
+    <button mat-icon-button (click)="getPartnerCompanyList()">
+      <mat-icon title="Refresh">refresh</mat-icon>
+    </button>
+  </div>
+</div>
+
+<mat-card class="clsCustomZeroPadding">
+  <mat-card-content>
+    <div class="mat-elevation-z8">
+      <table mat-table [dataSource]="companyTblList" matSort matSortActive="company_name" matSortActive="company_name"
+        matSortDirection="asc">
+        <ng-container matColumnDef="company_name">
+          <th width="1000" mat-header-cell *matHeaderCellDef mat-sort-header>{{'Company'|translate}}</th>
+          <td width="1000" mat-cell *matCellDef="let row">{{row.company_name}}</td>
+        </ng-container>
+        <ng-container matColumnDef="connectedNodeCount">
+          <th width="1000" mat-header-cell *matHeaderCellDef mat-sort-header>{{'Node' | translate}}</th>
+          <td width="1000" mat-cell *matCellDef="let row">
+            <button mat-icon-button title="{{'Total'|translate}}">
+              <mat-icon>memory</mat-icon>
+              <span class="clsIconCntLabel">{{row.totalNodeCount}}</span>
+            </button>
+            <button mat-icon-button title="{{'Connected'|translate}}">
+              <mat-icon svgIcon="custom:memory_on"></mat-icon>
+              <span class="clsIconCntLabel">{{row.connectedNodeCount}}</span>
+            </button>
+            <button mat-icon-button title="{{'Disconnected'|translate}}">
+              <mat-icon svgIcon="custom:memory_off"></mat-icon>
+              <span class="clsIconCntLabel">{{row.totalNodeCount - row.connectedNodeCount}}</span>
+            </button>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="sms_balance">
+          <th width="1000" mat-header-cell *matHeaderCellDef mat-sort-header>{{'SMS Balance' | translate}}</th>
+          <td width="1000" mat-cell *matCellDef="let row">{{row.sms_balance}}</td>
+        </ng-container>
+        <ng-container matColumnDef="renewal_date">
+          <th width="1000" mat-header-cell *matHeaderCellDef mat-sort-header>{{'Renewal Date' | translate}}</th>
+          <td width="1000" mat-cell *matCellDef="let row">{{row.renewalDate}}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+      <div class="clsCustomTblNoRecordsMsg" *ngIf="!companyTblList">
+        <span>{{'No records found'|translate}}</span>
+      </div>
+      <mat-paginator style="display: flex; align-items: left;" [pageSizeOptions]="tableConfig['pageSizeOptions']"></mat-paginator>
+    </div>
+  </mat-card-content>
+</mat-card>

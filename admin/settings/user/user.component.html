@@ -1,0 +1,335 @@
+<mat-card class="clsCustomZeroMargin" *ngIf="(data['requestAction'] == 'edit' && currentUser['user_id'] == this.userId)">
+  <mat-card-title >{{ data['requestAction'] | capitalizeFirst |translate}}  {{'User'|translate}}</mat-card-title>
+  <form #form="ngForm" [formGroup]="userForm" (ngSubmit)="submitUser(form.form)">
+    <mat-card-content class="clsDialogScroll"> 
+      <div fxLayout="column" fxLayoutWrap="wrap">
+        <mat-form-field class="clsCustomFullWidth">
+          <input matInput placeholder="{{'Email'| translate}}" formControlName="email" type="email" required (focusout)="userEmail(form.form)" readonly>
+          <mat-error *ngIf="userForm.controls['email'].hasError('required') && userForm.controls['email'].touched">{{'emailReq' |translate}}</mat-error>
+          <mat-error *ngIf="userForm.controls['email'].errors?.email && userForm.controls['email'].touched">{{'emailInvalid' |translate}}</mat-error>
+          <mat-error *ngIf="userForm.controls['email'].errors?.uniqueEmail && userForm.controls['email'].touched">{{'emailExists' |translate}}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="clsCustomFullWidth">
+          <input matInput placeholder="{{'First Name'| translate}}" formControlName="firstName"  required>
+          <mat-error *ngIf="userForm.controls['firstName'].hasError('required') && userForm.controls['firstName'].touched">{{'firstNameReq' |translate}}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="clsCustomFullWidth">
+          <input matInput placeholder="{{'Last Name'| translate}}" formControlName="lastName"  required>
+          <mat-error *ngIf="userForm.controls['lastName'].hasError('required') && userForm.controls['lastName'].touched">{{'lastNameReq' |translate}}</mat-error>
+        </mat-form-field>
+          
+        <div formArrayName="companyAry" *ngIf="data['requestAction'] == 'edit'">
+          <div *ngFor="let ctrl of companyAr.controls; let ci=index" [formGroupName]="ci">
+            <div fxLayout="row" fxLayoutAlign="start">
+              <div fxFlex.gt-lg="48" fxFlex.lg="48" fxFlex.md="48" fxFlex.sm="48" fxFlex.xs="100" fxFlex="100">
+                <mat-form-field class="clsMatFormFieldWidth">
+                  <input matInput placeholder="{{'Company'| translate}}" formControlName="company"  required>
+                  <mat-error *ngIf="userForm.controls.companyAry.controls[ci].controls['company'].hasError('required') && userForm.controls.companyAry.controls[ci].controls['company'].touched">{{'companyReq' |translate}}</mat-error>
+                </mat-form-field>
+              </div>
+              <div fxFlex.gt-lg="48" fxFlex.lg="48" fxFlex.md="48" fxFlex.sm="48" fxFlex.xs="100" fxFlex="100">
+                <mat-form-field class="clsCustomFullWidth">
+                  <mat-select placeholder="{{'Role'| translate}}" formControlName="role" [disabled]="true" required>
+                    <mat-option *ngFor="let role of roles" [value]="role.name">
+                      {{role.name}}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="userForm.controls.companyAry.controls[ci].controls['role'].hasError('required') && userForm.controls.companyAry.controls[ci].controls['role'].touched">{{'roleReq'|translate}}</mat-error>
+                </mat-form-field>
+              </div>
+              <div fxFlex.gt-lg="4" fxFlex.lg="4" fxFlex.md="4" fxFlex.sm="4" fxFlex.xs="100" fxFlex="100" fxLayoutAlign="end" class="pt-1" *ngIf="ci != 0">
+                <button mat-mini-fab color="warn" type="button" class="clsCustomMatMiniFabIcon" (click)="removeCompany(ci,companyAry[ci]['id'])">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div> 
+            </div>
+          </div>
+        </div>
+        <div *ngIf=" (currentUser['user_id'] == this.userId) ">
+        <mat-form-field class="clsCustomFullWidth">
+          <input matInput placeholder="{{'Mobile Number'| translate}} (Ex: +91xxxxxxxxxx)" formControlName="mobile" type="text" >
+          <mat-error *ngIf="userForm.controls['mobile'].hasError('required') && userForm.controls['mobile'].touched">{{'mobileReq' |translate}}</mat-error>
+          <mat-error *ngIf="userForm.controls['mobile'].errors?.invalidMobileNumber && userForm.controls['mobile'].touched">{{'mobileInvalid' |translate}}</mat-error>
+          <mat-error *ngIf="userForm.controls['mobile'].errors?.uniqueMobile && userForm.controls['mobile'].touched">{{'mobileExists' |translate}}</mat-error>
+          <mat-error *ngIf="userForm.controls['mobile'].hasError('pattern')"> Please enter the valid mobile number. </mat-error>
+        </mat-form-field>
+      </div>
+      <div *ngIf=" (currentUser['user_id'] != this.userId) ">
+        <mat-form-field class="clsCustomFullWidth">
+          <input matInput placeholder="{{'Mobile Number'| translate}} (Ex: +91xxxxxxxxxx)" formControlName="mobile" type="password"  >
+          <mat-error *ngIf="userForm.controls['mobile'].hasError('required') && userForm.controls['mobile'].touched">{{'mobileReq' |translate}}</mat-error>
+          <mat-error *ngIf="userForm.controls['mobile'].errors?.invalidMobileNumber && userForm.controls['mobile'].touched">{{'mobileInvalid' |translate}}</mat-error>
+          <mat-error *ngIf="userForm.controls['mobile'].errors?.uniqueMobile && userForm.controls['mobile'].touched">{{'mobileExists' |translate}}</mat-error>
+          <mat-error *ngIf="userForm.controls['mobile'].hasError('pattern')"> Please enter the valid mobile number. </mat-error>
+        </mat-form-field>
+      </div>
+        <!-- language -->
+     <div [ngClass]="'clsDisabled'">
+      <div [ngClass]="(currentUser['user_id'] == this.userId) ? 'clsDisabled' : ''">
+        <mat-form-field class="clsCustomFullWidth">
+          <mat-select placeholder="{{'Language'| translate}}" formControlName="language" required  >
+            <ngx-mat-select-search #searchLanguage placeholderLabel="{{'Search'|translate}}"
+              [noEntriesFoundLabel]="'No record found'"></ngx-mat-select-search>
+            <mat-option *ngFor="let language of languages|search:searchLanguage.value" [value]="language.value">
+              {{language.name}}
+            </mat-option>
+          </mat-select>
+          <!-- <mat-error *ngIf="userForm.controls['language'].hasError('required') && userForm.controls['language'].touched">
+         {{'langReq' |translate}}</mat-error> -->
+        </mat-form-field>
+      </div>
+      </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions align="start" class="clsCustomZeroMargin">
+      <button mat-raised-button type="submit" class="btn" color="primary" [disabled]="!userForm.valid || isButtonDisabled">{{'Submit'| translate}}</button>
+      <button mat-raised-button type="button" (click)="cancel()">{{'Cancel'| translate}}</button>
+    </mat-card-actions>
+  </form>
+</mat-card>
+
+<mat-card class="clsCustomZeroMargin" *ngIf="(data['requestAction'] == 'edit' && currentUser['user_id'] != this.userId)">
+  
+  <mat-card-title >{{ data['requestAction'] | capitalizeFirst |translate}}  {{'User'|translate}}</mat-card-title>
+  <form #form="ngForm" [formGroup]="userForm" (ngSubmit)="submitUser(form.form)">
+    <mat-card-content class="clsDialogScroll"> 
+      <div fxLayout="column" fxLayoutWrap="wrap">
+        <mat-form-field class="clsCustomFullWidth">
+          <input matInput placeholder="{{'Email'| translate}}" formControlName="email" type="email" required (focusout)="userEmail(form.form)" readonly>
+          <mat-error *ngIf="userForm.controls['email'].hasError('required') && userForm.controls['email'].touched">{{'emailReq' |translate}}</mat-error>
+          <mat-error *ngIf="userForm.controls['email'].errors?.email && userForm.controls['email'].touched">{{'emailInvalid' |translate}}</mat-error>
+          <mat-error *ngIf="userForm.controls['email'].errors?.uniqueEmail && userForm.controls['email'].touched">{{'emailExists' |translate}}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="clsCustomFullWidth">
+          <input matInput placeholder="{{'First Name'| translate}}" formControlName="firstName" readonly required>
+          <mat-error *ngIf="userForm.controls['firstName'].hasError('required') && userForm.controls['firstName'].touched">{{'firstNameReq' |translate}}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="clsCustomFullWidth">
+          <input matInput placeholder="{{'Last Name'| translate}}" formControlName="lastName" readonly required>
+          <mat-error *ngIf="userForm.controls['lastName'].hasError('required') && userForm.controls['lastName'].touched">{{'lastNameReq' |translate}}</mat-error>
+        </mat-form-field>
+          
+        <div formArrayName="companyAry" *ngIf="data['requestAction'] == 'edit'">
+          <div *ngFor="let ctrl of companyAr.controls; let ci=index" [formGroupName]="ci">
+            <div fxLayout="row" fxLayoutAlign="start">
+              <div fxFlex.gt-lg="48" fxFlex.lg="48" fxFlex.md="48" fxFlex.sm="48" fxFlex.xs="100" fxFlex="100">
+                <mat-form-field class="clsMatFormFieldWidth">
+                  <input matInput placeholder="{{'Company'| translate}}" formControlName="company" readonly required>
+                  <mat-error *ngIf="userForm.controls.companyAry.controls[ci].controls['company'].hasError('required') && userForm.controls.companyAry.controls[ci].controls['company'].touched">{{'companyReq' |translate}}</mat-error>
+                </mat-form-field>
+              </div>
+              <div fxFlex.gt-lg="48" fxFlex.lg="48" fxFlex.md="48" fxFlex.sm="48" fxFlex.xs="100" fxFlex="100">
+                <mat-form-field class="clsCustomFullWidth">
+                  <mat-select placeholder="{{'Role'| translate}}" formControlName="role"  required>
+                    <mat-option *ngFor="let role of roles" [value]="role.name"  (click)=Toggle(role.value)>
+                      {{role.name}}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="userForm.controls.companyAry.controls[ci].controls['role'].hasError('required') && userForm.controls.companyAry.controls[ci].controls['role'].touched">{{'roleReq'|translate}}</mat-error>
+                </mat-form-field>
+              </div>
+              <div fxFlex.gt-lg="4" fxFlex.lg="4" fxFlex.md="4" fxFlex.sm="4" fxFlex.xs="100" fxFlex="100" fxLayoutAlign="end" class="pt-1" *ngIf="ci != 0">
+                <button mat-mini-fab color="warn" type="button" class="clsCustomMatMiniFabIcon" (click)="removeCompany(ci,companyAry[ci]['id'])">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div> 
+            </div>
+          </div>
+        </div>
+        <div *ngIf=" (currentUser['user_id'] == this.userId) ">
+          <mat-form-field class="clsCustomFullWidth">
+            <input matInput placeholder="{{'Mobile Number'| translate}} (Ex: +91xxxxxxxxxx)" formControlName="mobile" type="text" readonly required>
+            <mat-error *ngIf="userForm.controls['mobile'].hasError('required') && userForm.controls['mobile'].touched">{{'mobileReq' |translate}}</mat-error>
+            <mat-error *ngIf="userForm.controls['mobile'].errors?.invalidMobileNumber && userForm.controls['mobile'].touched">{{'mobileInvalid' |translate}}</mat-error>
+            <mat-error *ngIf="userForm.controls['mobile'].errors?.uniqueMobile && userForm.controls['mobile'].touched">{{'mobileExists' |translate}}</mat-error>
+            <mat-error *ngIf="userForm.controls['mobile'].hasError('pattern')"> Please enter the valid mobile number. </mat-error>
+          </mat-form-field>
+        </div>
+        <div *ngIf=" (currentUser['user_id'] != this.userId) ">
+          <mat-form-field class="clsCustomFullWidth">
+            <input matInput placeholder="{{'Mobile Number'| translate}} (Ex: +91xxxxxxxxxx)" formControlName="mobile" type="password" readonly required>
+            <mat-error *ngIf="userForm.controls['mobile'].hasError('required') && userForm.controls['mobile'].touched">{{'mobileReq' |translate}}</mat-error>
+            <mat-error *ngIf="userForm.controls['mobile'].errors?.invalidMobileNumber && userForm.controls['mobile'].touched">{{'mobileInvalid' |translate}}</mat-error>
+            <mat-error *ngIf="userForm.controls['mobile'].errors?.uniqueMobile && userForm.controls['mobile'].touched">{{'mobileExists' |translate}}</mat-error>
+            <mat-error *ngIf="userForm.controls['mobile'].hasError('pattern')"> Please enter the valid mobile number. </mat-error>
+          </mat-form-field>
+          <mat-error *ngIf="userForm.get('mobile').hasError('pattern')">
+            Please enter the valid mobile number.
+      </mat-error>
+        </div>
+     
+        <div >
+          <mat-form-field class="clsCustomFullWidth" *ngIf=" test!=false ">
+            <mat-select placeholder="{{'Language'| translate}}" formControlName="language" [disabled]="true" required  >
+              <ngx-mat-select-search #searchLanguage placeholderLabel="{{'Search'|translate}}"
+                [noEntriesFoundLabel]="'No record found'"></ngx-mat-select-search>
+              <mat-option *ngFor="let language of languages|search:searchLanguage.value" [value]="language.value">
+                {{language.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="clsCustomFullWidth" *ngIf=" test==false ">
+            <mat-select placeholder="{{'Language'| translate}}" formControlName="language" required  >
+              <ngx-mat-select-search #searchLanguage placeholderLabel="{{'Search'|translate}}"
+                [noEntriesFoundLabel]="'No record found'"></ngx-mat-select-search>
+              <mat-option *ngFor="let language of languages|search:searchLanguage.value" [value]="language.value">
+                {{language.name}}
+              </mat-option>
+            </mat-select>
+            <!-- <mat-error *ngIf="userForm.controls['language'].hasError('required') && userForm.controls['language'].touched">
+           {{'langReq' |translate}}</mat-error> -->
+          </mat-form-field>
+        </div>
+
+        <div >
+          <mat-form-field class="clsCustomFullWidth"  *ngIf="test!=false">
+            <mat-select placeholder="{{'User Timezone'| translate}}"  formControlName="timezone" [disabled]="true">
+              <ngx-mat-select-search #searchTimezone placeholderLabel="{{'Search'| translate}}" [noEntriesFoundLabel]="'No record found'"></ngx-mat-select-search>
+                <mat-option *ngFor="let timezone of timezoneAry|search:searchTimezone.value" [value]="timezone.value">{{timezone.name}}</mat-option>
+              </mat-select>
+          
+            <!-- <mat-error
+              *ngIf="userForm.controls['timezone'].hasError('required') && userForm.controls['timezone'].touched">
+              {{'langReq' |translate}}</mat-error>  -->
+          </mat-form-field>
+    
+     
+        <mat-form-field class="clsCustomFullWidth"  *ngIf="test==false" >
+          <mat-select placeholder="{{'User Timezone'| translate}}"  formControlName="timezone" >
+            <ngx-mat-select-search #searchTimezone placeholderLabel="{{'Search'| translate}}" [noEntriesFoundLabel]="'No record found'"></ngx-mat-select-search>
+              <mat-option *ngFor="let timezone of timezoneAry|search:searchTimezone.value" [value]="timezone.value">{{timezone.name}}</mat-option>
+            </mat-select>
+        
+          
+        </mat-form-field>
+      </div>
+
+      <div >
+        <mat-form-field class="clsCustomFullWidth" *ngIf=" test==false ">
+          <mat-select placeholder="{{'Currency'|translate}}" formControlName="currency" >
+            <ngx-mat-select-search #searchCurrency placeholderLabel="{{'Search'|translate}}" [noEntriesFoundLabel]="'No record found'"></ngx-mat-select-search>
+            <mat-option *ngFor="let currency of currencies|search:searchCurrency.value" [value]="currency.value">{{currency.name}}</mat-option>
+          </mat-select>
+  <!--           
+          <mat-error
+            *ngIf="userForm.controls['currency'].hasError('required') && userForm.controls['currency'].touched">
+            {{'langReq' |translate}}</mat-error>  -->
+        </mat-form-field>
+      </div>
+      <div >
+        <mat-form-field class="clsCustomFullWidth" *ngIf=" test!=false ">
+          <mat-select placeholder="{{'Currency'|translate}}" formControlName="currency" [disabled]="true" >
+            <ngx-mat-select-search #searchCurrency placeholderLabel="{{'Search'|translate}}" [noEntriesFoundLabel]="'No record found'"></ngx-mat-select-search>
+            <mat-option *ngFor="let currency of currencies|search:searchCurrency.value" [value]="currency.value">{{currency.name}}</mat-option>
+          </mat-select>
+  <!--           
+          <mat-error
+            *ngIf="userForm.controls['currency'].hasError('required') && userForm.controls['currency'].touched">
+            {{'langReq' |translate}}</mat-error>  -->
+        </mat-form-field>
+      </div>
+
+      <div >
+        <mat-form-field class="clsCustomFullWidth" *ngIf=" test!=false ">
+          <mat-select placeholder="{{'Number Format'| translate}}" formControlName="numberFormat" [disabled]="true" >
+            <ngx-mat-select-search #searchNumber placeholderLabel="{{'Search'|translate}}" [noEntriesFoundLabel]="'No record found'"></ngx-mat-select-search>
+        <mat-option *ngFor="let number of numberFormatAry|search:searchNumber.value" [value]="number.value">{{number.name}}</mat-option>
+      </mat-select>
+          <!-- <mat-error
+            *ngIf="userForm.controls['numberFormat'].hasError('required') && userForm.controls['numberFormat'].touched">
+            {{'langReq' |translate}}</mat-error>  -->
+        </mat-form-field>
+      </div>
+  
+  
+      <div >
+        <mat-form-field class="clsCustomFullWidth" *ngIf=" test==false ">
+          <mat-select placeholder="{{'Number Format'| translate}}" formControlName="numberFormat" >
+            <ngx-mat-select-search #searchNumber placeholderLabel="{{'Search'|translate}}" [noEntriesFoundLabel]="'No record found'"></ngx-mat-select-search>
+        <mat-option *ngFor="let number of numberFormatAry|search:searchNumber.value" [value]="number.value">{{number.name}}</mat-option>
+      </mat-select>
+          <!-- <mat-error
+            *ngIf="userForm.controls['numberFormat'].hasError('required') && userForm.controls['numberFormat'].touched">
+            {{'langReq' |translate}}</mat-error>  -->
+        </mat-form-field>
+      </div>
+      
+         <!-- Node list for access denide nodes -->
+      <!-- <mat-form-field class="clsCustomFullWidth" *ngIf='!nodeaccess'>
+        <mat-select matInput placeholder="{{'Access Denied Nodes'| translate}}" formControlName="node"
+          [(ngModel)]="selectedNodes" multiple #Selectnode>
+          <ngx-mat-select-search #searchNode placeholderLabel="{{'Search'| translate}}"
+            [noEntriesFoundLabel]="'No record found'"></ngx-mat-select-search>
+          <div class="button">
+            <button mat-raised-button class="mat-primary fill text-sm "
+              (click)="selectAll(Selectnode, selectallnodes)">Select All
+            </button>&nbsp;
+            <button mat-raised-button class="mat-primary fill text-sm " (click)="deselectAll(Selectnode)">
+              Deselect All
+            </button>
+          </div>
+          <mat-option *ngFor="let node of nodes | search:searchNode.value" [value]="node.node_id">
+            <span *ngIf="nodeStatusObj">
+              <button *ngIf="!nodeStatusObj[node.node_unique_id]" class="mat-icon-button" mat-icon-button
+                class="clsCustomNodeOnOffButton">
+                <mat-icon>memory</mat-icon>
+              </button>
+              <button *ngIf="'ON' == nodeStatusObj[node.node_unique_id]" mat-icon-button
+                title="{{'Connected'|translate}}" class="clsCustomNodeOnOffButton">
+                <mat-icon svgIcon="custom:memory_on"></mat-icon>
+              </button>
+              <button *ngIf="'OFF' == nodeStatusObj[node.node_unique_id]" mat-icon-button
+                title="{{'Disconnected'|translate}}" class="clsCustomNodeOnOffButton">
+                <mat-icon svgIcon="custom:memory_off"></mat-icon>
+              </button>
+              <button *ngIf="'E' == nodeStatusObj[node.node_unique_id]" mat-icon-button
+                title="{{'Communication Drop'|translate}}" class="clsCustomNodeOnOffButton">
+                <mat-icon svgIcon="custom:memory_err"></mat-icon>
+              </button>
+            </span>
+            <span>{{ node.node_name }}</span>
+          </mat-option>
+        </mat-select>
+      </mat-form-field> -->
+      </div>
+    </mat-card-content>
+    <mat-card-actions align="start" class="clsCustomZeroMargin">
+      <button mat-raised-button type="submit" class="btn" color="primary" [disabled]="!userForm.valid || isButtonDisabled">{{'Submit'| translate}}</button>
+      <button mat-raised-button type="button" (click)="cancel()">{{'Cancel'| translate}}</button>
+    </mat-card-actions>
+  </form>
+</mat-card>
+
+
+<mat-card class="clsCustomZeroMargin" *ngIf="data['requestAction'] == 'changePwd'">
+  <mat-card-title>{{'Edit User Password'|translate}}</mat-card-title>
+  <form #form="ngForm" [formGroup]="changePwdForm" (ngSubmit)="submitChangePwd(form.form)">
+    <mat-card-content class="clsDialogScroll"> 
+      <div fxLayout="column" fxLayoutWrap="wrap">
+        <mat-form-field class="clsCustomFullWidth">
+          <input matInput placeholder="{{'New password'| translate}}" formControlName="password" [type]="settingDataObj['updatePassword'] ? 'password' : 'text'" required>
+          <mat-icon matSuffix class="clsCursor" (click)="settingDataObj['updatePassword'] = !settingDataObj['updatePassword']">{{settingDataObj['updatePassword'] ? 'visibility_off' : 'visibility'}}</mat-icon>
+          <mat-error *ngIf="changePwdForm.controls['password'].hasError('required') && changePwdForm.controls['password'].touched">{{'pwdReq' |translate}}</mat-error>
+          <mat-error *ngIf="changePwdForm.controls['password'].errors?.pattern && changePwdForm.controls['password'].touched">{{'pwdInvalid'|translate}}</mat-error>
+        </mat-form-field>
+        <mat-form-field class="clsCustomFullWidth">
+          <input matInput placeholder="{{'Confirm new password'| translate}}" formControlName="confirmPassword" [type]="settingDataObj['updateConfirmPassword'] ? 'password' : 'text'" required>
+          <mat-icon matSuffix class="clsCursor" (click)="settingDataObj['updateConfirmPassword'] = !settingDataObj['updateConfirmPassword']">{{settingDataObj['updateConfirmPassword'] ? 'visibility_off' : 'visibility'}}</mat-icon>
+          <mat-error *ngIf="changePwdForm.controls['confirmPassword'].hasError('required') && changePwdForm.controls['confirmPassword'].touched">{{'confirmPwdReq' |translate}}</mat-error>
+          <mat-error *ngIf="changePwdForm.controls['confirmPassword'].errors?.equalTo">{{'pwdNotMatched' |translate}}</mat-error>
+        </mat-form-field>
+      </div>
+    </mat-card-content>
+    <mat-card-actions align="start" class="clsCustomZeroMargin">
+      <button mat-raised-button type="submit" color="primary" [disabled]="!changePwdForm.valid || isButtonDisabled">{{'Submit'| translate}}</button>
+      <button mat-raised-button type="button" (click)="cancel()">{{'Cancel'| translate}}</button>
+    </mat-card-actions>
+  </form>
+
+</mat-card>

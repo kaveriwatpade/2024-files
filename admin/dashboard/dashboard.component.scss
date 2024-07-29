@@ -1,0 +1,34 @@
+.clsDarkBlueGrey{
+	background-color:#607D8B;
+	color:rgba(255, 255, 255, 0.87);
+  min-height: 92%;
+}
+.clsBlueGrey{
+	background-color:#78909C;
+	color:rgba(255, 255, 255, 0.87);
+  min-height: 92%;
+}
+::ng-deep .clsDarkBlueGrey .mat-icon,.clsBlueGrey .mat-icon{
+  color:rgba(255, 255, 255, 0.87);
+}
+.clsDarkBlueGrey h2,.clsBlueGrey h2{
+	font-weight: 400 !important;
+}
+.clsIconCntLabel {
+	position: absolute;
+	top: 0;
+	left: 60%;
+	font-size: 10px;
+	font-weight: 700;
+	line-height: 17px;
+	border-radius: 50%;
+	width: 17px;
+	height: 17px;
+	background-color:#dedede;
+	border: 1px solid #dedede;
+	color:#4C4C4C;
+	text-align: center;
+}
+.clsListWithSearchContainer{
+	margin-bottom: -0.33333333rem;
+}

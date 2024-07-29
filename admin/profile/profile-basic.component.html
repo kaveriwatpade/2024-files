@@ -1,0 +1,58 @@
+<form fxLayout="column" class="pa-1" [formGroup]="basicProfileForm" #form="ngForm" (ngSubmit)="submitBasic(form.form)">
+  <mat-card-content class="clsCardContent">
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <span>{{'Basic Information'|translate}}</span>
+      <span fxFlex></span>
+      <button mat-icon-button [mat-menu-trigger-for]="menu" type="button">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu" xPosition="before">
+        <button mat-menu-item (click)="toggleView()" type="button">{{dropdownLink}}</button>
+      </mat-menu>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="start center" *ngIf="true != editBasicProfile">
+      <div class="pr-1" fxFlex>
+        <div fxLayout="column">
+          <span class="text-md">{{'First Name'|translate}}</span>
+          <strong>{{firstName}}</strong>
+        </div>
+        <div fxLayout="column">
+          <span class="text-md mt-1">{{'Last Name'|translate}}</span>
+          <strong>{{lastName}}</strong>
+        </div>
+        <div fxLayout="column">
+          <span class="text-md mt-1">{{'Mobile Number'|translate}}</span>
+          <strong>{{mobile}}</strong>
+        </div>
+        <div fxLayout="column">
+          <span class="text-md mt-1">{{'Email'|translate}}</span>
+          <strong>{{email}}</strong>
+        </div>
+      </div>
+    </div>
+    <div fxLayout="column" fxLayoutAlign="start" *ngIf="true == editBasicProfile">
+      <mat-form-field class="clsCustomFullWidth">
+        <input matInput required placeholder="{{'First Name'|translate}}" formControlName="firstName">
+        <mat-error *ngIf="basicProfileForm.controls['firstName'].hasError('required') && basicProfileForm.controls['firstName'].touched">{{'firstNameReq'|translate}}</mat-error>
+      </mat-form-field>
+      <mat-form-field class="clsCustomFullWidth">
+        <input matInput required placeholder="{{'Last Name'|translate}}" formControlName="lastName">
+        <mat-error *ngIf="basicProfileForm.controls['lastName'].hasError('required') && basicProfileForm.controls['lastName'].touched">{{'lastNameReq'|translate}}</mat-error>
+      </mat-form-field>
+      <mat-form-field class="clsCustomFullWidth">
+        <input matInput required placeholder="{{'Mobile Number'| translate}} (Ex: +91xxxxxxxxxx)" formControlName="mobile">
+        <mat-error *ngIf="basicProfileForm.controls['mobile'].hasError('required') && basicProfileForm.controls['mobile'].touched">{{'mobileReq'|translate}}</mat-error>
+        <mat-error *ngIf="basicProfileForm.controls['mobile'].errors?.validMobileNumber && basicProfileForm.controls['mobile'].touched">{{'mobileInvalid'|translate}}</mat-error>
+      </mat-form-field>
+      <mat-form-field class="clsCustomFullWidth">
+        <input matInput required placeholder="{{'Email'|translate}}" formControlName="email">
+        <mat-error *ngIf="basicProfileForm.controls['email'].hasError('required') && basicProfileForm.controls['email'].touched">{{'emailReq'|translate}}</mat-error>
+        <mat-error *ngIf="basicProfileForm.controls['email'].errors?.email && basicProfileForm.controls['email'].touched">{{'emailInvalid'|translate}}</mat-error>
+      </mat-form-field>
+    </div>
+  </mat-card-content>
+  <mat-card-actions class="clsCustomZeroMargin" *ngIf="true == editBasicProfile">
+    <button mat-raised-button class="shadow-none" type="submit" class="btn" color="primary" [disabled]="!basicProfileForm.valid || isButtonDisabled">{{'Submit'|translate}}</button>
+    <button mat-raised-button type="button" (click)="toggleView()">{{'Cancel'|translate}}</button>
+  </mat-card-actions>
+</form>

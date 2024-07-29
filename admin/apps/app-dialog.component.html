@@ -1,0 +1,66 @@
+<mat-card class="clsCustomZeroMargin">
+	<mat-card-header>
+		<img mat-card-avatar src="assets/images/apps/{{data['requestActionData'].image}}" class="clsBorder">
+		<mat-card-title>{{data['requestActionData']['title'] |translate}}</mat-card-title>
+		<mat-card-subtitle class="clsCustomCardSubtitle">
+			<mat-icon class="clsStared">star</mat-icon>
+			<mat-icon class="clsStared">star</mat-icon>
+			<mat-icon class="clsStared">star</mat-icon>
+			<mat-icon class="clsStared">star</mat-icon>
+			<mat-icon>star</mat-icon>
+		</mat-card-subtitle>
+	</mat-card-header>
+	<mat-card-content>
+		<mat-tab-group>
+			<mat-tab label="{{'Overview' |translate}}">
+				<mat-card-content class="clsDialogScroll pt-1">
+					<div fxLayout="row wrap" fxLayoutAlign="start start" fxFlex fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex.gt-md="100" fxFlex="100" class="clsOverviewContainer">
+						<div fxFlex.gt-lg="30" fxFlex.lg="40" fxFlex.gt-md="40" fxFlex.md="100" fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+							<img src="assets/images/apps/{{data['requestActionData']['image']}}" width="300px" class="clsBorder">
+						</div>
+						<div fxFlex.gt-lg="70" fxFlex.lg="60" fxFlex.gt-md="60" fxFlex.md="100" fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100" *ngIf="data['requestActionData']['overview']">
+							<p *ngFor="let overview of data['requestActionData']['overview'];">
+								{{overview |translate}}
+							</p>
+						</div>
+						<div fxFlex.gt-lg="70" fxFlex.lg="60" fxFlex.gt-md="60" fxFlex.md="100" fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100" *ngIf="!data['requestActionData']['overview']">
+							<p>{{'Coming Soon' | translate}}</p>
+						</div>
+					</div>
+				</mat-card-content>
+			</mat-tab>
+
+			<mat-tab label="{{'Additional Information' |translate}}">
+				<mat-card-content class="clsDialogScroll pt-1">
+					<div class="pr-1" fxFlex>
+						<div fxLayout="column" class="mb-1">
+							<span class="text-md">{{'Version' |translate}}</span>
+							<strong>{{ data['requestActionData']['version'] }}</strong>
+						</div>
+						<div fxLayout="column" class="mb-1">
+							<span class="text-md">{{'Category' |translate}}</span>
+							<strong>{{ data['requestActionData']['category'] |translate }}</strong>
+						</div>
+						<div fxLayout="column" class="mb-1">
+							<span class="text-md">{{'Updated' |translate}}</span>
+							<strong>{{ data['requestActionData']['updated'] }}</strong>
+						</div>
+						<div fxLayout="column" class="mb-1">
+							<span class="text-md">{{'Language' |translate}}</span>
+							<strong>{{ data['requestActionData']['language'] |translate}}</strong>
+						</div>
+						<div fxLayout="column">
+							<span class="text-md">{{'Developer' |translate}}</span>
+							<strong>{{'ESL' |translate}}</strong>
+						</div>
+					</div>
+				</mat-card-content>
+			</mat-tab>
+
+			<mat-tab label="{{'Related' |translate}}">
+				<mat-card-content class="clsDialogScroll pt-0">
+				</mat-card-content>
+			</mat-tab>
+		</mat-tab-group>
+	</mat-card-content>
+</mat-card>

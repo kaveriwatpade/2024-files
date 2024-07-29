@@ -1,0 +1,61 @@
+<form fxLayout="column" class="pa-1" [formGroup]="regionalProfileForm" #form="ngForm" (ngSubmit)="submitRegional(form.form)">
+	<mat-card-content class="clsCardContent">
+		<div fxLayout="row" fxLayoutAlign="start center">
+			<span>{{'Localization'|translate }}</span>
+			<span fxFlex></span>
+			<button mat-icon-button [mat-menu-trigger-for]="menu" type="button">
+				<mat-icon>more_vert</mat-icon>
+			</button>
+			<mat-menu #menu="matMenu" xPosition="before">
+				<button mat-menu-item (click)="toggleView()" type="button">{{dropdownLink}}</button>
+			</mat-menu>
+		</div>
+		<div fxLayout="row" fxLayoutAlign="start center" *ngIf="true != editRegionalProfile">
+			<div class="pr-1" fxFlex>
+				<div fxLayout="column">
+					<span class="text-md">{{'Language'|translate}}</span>
+					<strong>{{regionalProfileForm['controls']['language']['value']}}</strong>
+				</div>
+				<div fxLayout="column">
+					<span class="text-md mt-1">{{'Date Format'|translate}}</span>
+					<strong>{{dateFormat}}</strong>
+				</div>
+				<div fxLayout="column">
+					<span class="text-md mt-1">{{'Number Format'|translate}}</span>
+					<strong>{{numberFormatToDisplay}}</strong>
+				</div>
+			</div>
+		</div>
+		<div fxLayout="column" fxLayoutAlign="start" *ngIf="true == editRegionalProfile">
+			<mat-form-field class="clsCustomFullWidth">
+				<mat-select matInput placeholder="{{'Language'| translate}}" formControlName="language" required>
+					<ngx-mat-select-search #searchLanguage placeholderLabel="{{'Search'| translate}}" [noEntriesFoundLabel]="'No record found'"></ngx-mat-select-search>
+					<mat-option *ngFor="let language of languages | search:searchLanguage.value" [value]="language.value">
+						{{language.name}}
+					</mat-option>
+				</mat-select>
+				<mat-error *ngIf="regionalProfileForm.controls['language'].hasError('required') && regionalProfileForm.controls['language'].touched">{{'LanguageReq'|translate}}</mat-error>
+			</mat-form-field>
+			<mat-form-field class="clsCustomFullWidth">
+				<mat-select matInput placeholder="{{'Date Format'| translate}}" formControlName="dateFormat">
+					<ngx-mat-select-search #searchDate placeholderLabel="{{'Search'| translate}}" [noEntriesFoundLabel]="'No record found'"></ngx-mat-select-search>
+					<mat-option *ngFor="let date of dateFormatAry | search:searchDate.value" [value]="date.value">
+						{{date.name}}
+					</mat-option>
+				</mat-select>
+			</mat-form-field>
+			<mat-form-field class="clsCustomFullWidth">
+				<mat-select matInput placeholder="{{'Number Format'| translate}}" formControlName="numberFormat">
+					<ngx-mat-select-search #searchNumberFormat placeholderLabel="{{'Search'| translate}}" [noEntriesFoundLabel]="'No record found'"></ngx-mat-select-search>
+					<mat-option *ngFor="let numberFormat of numberFormatAry | search:searchNumberFormat.value" [value]="numberFormat.value">
+						{{numberFormat.name}}
+					</mat-option>
+				</mat-select>
+			</mat-form-field>
+		</div>
+	</mat-card-content>
+	<mat-card-actions class="clsCustomZeroMargin" *ngIf="true == editRegionalProfile">
+		<button mat-raised-button class="shadow-none" type="submit" class="btn" color="primary" [disabled]="!regionalProfileForm.valid || isButtonDisabled">{{'Submit'|translate}}</button>
+		<button mat-raised-button type="button" (click)="toggleView()">{{'Cancel'|translate}}</button>
+	</mat-card-actions>
+</form>

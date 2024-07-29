@@ -1,0 +1,40 @@
+<form fxLayout="column" class="pa-1" [formGroup]="securityProfileForm" #form="ngForm" (ngSubmit)="submitSecurity(form.form)">
+  <mat-card-content class="clsCardContent">
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <span>{{'Change Password'| translate}}</span>
+      <span fxFlex></span>
+      <button mat-icon-button [mat-menu-trigger-for]="menu" type="button">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu" xPosition="before">
+        <button mat-menu-item (click)="toggleView()" type="button">{{dropdownLink}}</button>
+      </mat-menu>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="start center" *ngIf="true != editSecurityProfile">
+    </div>
+    <div fxLayout="column" fxLayoutAlign="start" *ngIf="true == editSecurityProfile">
+      <mat-form-field class="clsCustomFullWidth">
+        <input matInput placeholder="{{'Old Password'| translate}}" formControlName="oldPwd" [type]="settingDataObj['oldPwd'] ? 'password' : 'text'" required>
+        <mat-icon matSuffix class="clsCursor" (click)="settingDataObj['oldPwd'] = !settingDataObj['oldPwd']">{{settingDataObj['oldPwd'] ? 'visibility_off' : 'visibility'}}</mat-icon>
+        <mat-error *ngIf="securityProfileForm.controls['oldPwd'].hasError('required') && securityProfileForm.controls['oldPwd'].touched">{{'oldPwdReq'|translate}}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="clsCustomFullWidth">
+        <input matInput placeholder="{{'New Password' | translate}}" formControlName="newPwd" [type]="settingDataObj['newPwd'] ? 'password' : 'text'" required>
+        <mat-icon matSuffix class="clsCursor" (click)="settingDataObj['newPwd'] = !settingDataObj['newPwd']">{{settingDataObj['newPwd'] ? 'visibility_off' : 'visibility'}}</mat-icon>
+        <mat-error *ngIf="securityProfileForm.controls['newPwd'].hasError('required') && securityProfileForm.controls['newPwd'].touched">{{'pwdReq'|translate}}</mat-error>
+        <mat-error *ngIf="securityProfileForm.controls['newPwd'].errors?.pattern && securityProfileForm.controls['newPwd'].touched">{{'pwdInvalid'|translate}}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="clsCustomFullWidth">
+        <input matInput placeholder="{{'Confirm Password' | translate }}" formControlName="confirmPwd" [type]="settingDataObj['confirmPwd'] ? 'password' : 'text'" required>
+        <mat-icon matSuffix class="clsCursor" (click)="settingDataObj['confirmPwd'] = !settingDataObj['confirmPwd']">{{settingDataObj['confirmPwd'] ? 'visibility_off' : 'visibility'}}</mat-icon>
+        <mat-error *ngIf="securityProfileForm.controls['confirmPwd'].errors?.equalTo">{{'pwdNotMatch'|translate}}</mat-error>
+      </mat-form-field>
+    </div>
+  </mat-card-content>
+  <mat-card-actions class="pa-1 clsCustomZeroMargin" *ngIf="true == editSecurityProfile">
+    <button mat-raised-button class="shadow-none" type="submit" class="btn" color="primary" [disabled]="!securityProfileForm.valid || isButtonDisabled">{{'Submit'| translate}}</button>
+    <button mat-raised-button type="button" (click)="toggleView()">{{'Cancel' | translate }}</button>
+  </mat-card-actions>
+</form>

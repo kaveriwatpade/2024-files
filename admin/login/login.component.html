@@ -1,0 +1,73 @@
+<div class="session clsCustomloginbackGroundImg">
+  <div class="session-content">
+    <div class="session-wrapper">
+      <div class="text-xs-center pb-1">
+        <img src="assets/images/marc_admin.svg" height="58" title="MARC">
+      </div>
+      <div id="login" [ngClass]="{ 'toggled':'login' == toggleShowHide }" *ngIf="'login' == toggleShowHide">
+        <mat-card class="clsCustomZeroPadding">
+          <mat-card-content class="customLoginContent">
+            <form [formGroup]="loginForm" (ngSubmit)="submitLoginForm(loginForm.value)">
+              <div fxLayout="column" fxLayoutAlign="space-around">
+                <div class="pb-1">
+                  <mat-form-field class="clsCustomFullWidth">
+                    <input matInput placeholder="Email" formControlName="email">
+                    <mat-icon matPrefix class="clsCustomMatIcon" matTooltip="Email">email</mat-icon>
+                    <mat-error *ngIf="loginForm.controls['email'].hasError('required') && loginForm.controls['email'].touched">{{'emailReq'|translate}}</mat-error>
+                    <mat-error *ngIf="loginForm.controls['email'].errors?.email && loginForm.controls['email'].touched">{{'emailInvalid'|translate}}</mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="pb-1">
+                  <mat-form-field class="clsCustomFullWidth">
+                    <mat-icon matPrefix class="clsCustomMatIcon">lock</mat-icon>
+                    <input matInput type="password" placeholder="Password" formControlName="password">
+                    <mat-error *ngIf="loginForm.controls['password'].hasError('required') && loginForm.controls['password'].touched">{{'pwdReq'|translate}}</mat-error>
+                    <mat-error *ngIf="loginForm.controls['password'].errors?.minlength && loginForm.controls['password'].touched">{{'pwdLength'|translate}}</mat-error>
+                  </mat-form-field>
+                </div>
+                <button color="primary" mat-fab type="submit" class="clsCustomLoginSubmitBtn" [disabled]="!loginForm.valid || isButtonDisabled">
+                  <mat-icon>arrow_forward</mat-icon>
+                </button>
+              </div>
+            </form>
+          </mat-card-content>
+        </mat-card>
+        <ul class="clsCustomLoginNavigation">
+          <li data-block="#forgot-password" class="clsCustomForgotPwdBgColor" (click)="toggleShowHide = 'forgot';">Forgot Password?</li>
+        </ul>
+      </div>
+      <div id="forgot-password" [ngClass]="{ 'toggled':'forgot' == toggleShowHide}" *ngIf="'forgot' == toggleShowHide">
+        <mat-card class="clsCustomZeroPadding">
+          <mat-card-content class="customLoginContent">
+            <form [formGroup]="forgotPasswordForm" (ngSubmit)="submitForgotPasswordForm(forgotPasswordForm.value)">
+              <div fxLayout="column" fxLayoutAlign="space-around">
+                <div class="pb-1">
+                  <mat-form-field class="clsCustomFullWidth">
+                    <mat-icon matPrefix class="clsCustomMatIcon">email</mat-icon>
+                    <input matInput placeholder="Email" formControlName="email">
+                    <mat-error *ngIf="forgotPasswordForm.controls['email'].hasError('required') && forgotPasswordForm.controls['email'].touched">{{'emailReq'|translate}}</mat-error>
+                    <mat-error *ngIf="forgotPasswordForm.controls['email'].errors?.email && forgotPasswordForm.controls['email'].touched">{{'emailInvalid'|translate}}</mat-error>
+                  </mat-form-field>
+                </div>
+                <button color="primary" mat-fab type="submit" class="clsCustomLoginSubmitBtn" [disabled]="!forgotPasswordForm.valid || isButtonDisabled">
+                  <mat-icon>arrow_forward</mat-icon>
+                </button>
+              </div>
+            </form>
+          </mat-card-content>
+        </mat-card>
+        <ul class="clsCustomLoginNavigation">
+          <li data-block="#login" class="clsCustomLoginBgColor" (click)="toggleShowHide = 'login';">Login</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="text-xs-center pb-1">
+    <a class="clsCustomAnchorTagPadding" href="https://itunes.apple.com/us/app/marc-energy/id1360661298?ls=1&mt=8">
+      <img src="assets/images/apple.png" title="iOS" height="45px">
+    </a>
+    <a href="https://play.google.com/store/apps/details?id=com.esl.hemant_pc.marc&hl=en">
+      <img src="assets/images/android.png" title="Android" height="45px">
+    </a>
+  </div>
+</div>

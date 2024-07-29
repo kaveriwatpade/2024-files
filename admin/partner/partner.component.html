@@ -1,0 +1,119 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row></mat-toolbar-row>
+  <mat-toolbar-row></mat-toolbar-row>
+</mat-toolbar>
+<div fxLayout="row wrap" fxLayoutAlign="center start">
+  <div fxFlex.gt-sm="55" fxFlex="100">
+    <mat-card class="clsMatCard pa-0" style="min-height:560px;">
+      <mat-tab-group>
+        <mat-tab>
+          <ng-template matTabLabel>{{'Basic' | translate}}</ng-template>
+          <mat-card-content class="clsCardContent pa-1">
+            <div fxLayout="row" fxLayoutAlign="start center">
+              <div class="pr-1" fxFlex>
+                <div fxLayout="column">
+                  <span class="text-md">{{'Partner Name' | translate}}</span>
+                  <strong>{{partnerData['partner_name'] ? partnerData['partner_name'] : '--'}}</strong>
+                </div>
+                <div fxLayout="column">
+                  <span class="text-md mt-1">{{'Partner Type' | translate}}</span>
+                  <strong>{{partnerData['partner_type'] ? partnerData['partner_type'] : '--'}}</strong>
+                </div>
+                <div fxLayout="column">
+                  <span class="text-md mt-1">{{'Email' | translate}}</span>
+                  <strong>{{partnerData['email_address'] ? partnerData['email_address'] : '--'}}</strong>
+                </div>
+                <div fxLayout="column">
+                  <span class="text-md mt-1">{{'Website' | translate}}</span>
+                  <strong>{{partnerData['website_url'] ? partnerData['website_url'] : '--'}}</strong>
+                </div>
+                <div fxLayout="column">
+                  <span class="text-md mt-1">{{'Mobile Number' | translate}}</span>
+                  <strong>{{partnerData['mobile'] ? partnerData['mobile'] : '--'}}</strong>
+                </div>
+                <div fxLayout="column">
+                  <span class="text-md mt-1">{{'Landline' | translate}}</span>
+                  <strong>{{partnerData['landline'] ? partnerData['landline'] : '--'}}</strong>
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-tab>
+        <mat-tab>
+          <ng-template matTabLabel>{{'Address' | translate}}</ng-template>
+          <mat-card-content class="clsCardContent pa-1">
+            <div fxLayout="row" fxLayoutAlign="start center">
+              <div class="pr-1" fxFlex>
+                <div fxLayout="column">
+                  <span class="text-md">{{'Address Line 1' | translate}}</span>
+                  <strong>{{partnerData['address'] ? partnerData['address']['address_line1'] : '--'}}</strong>
+                </div>
+                <div fxLayout="column">
+                  <span class="text-md mt-1">{{'Address Line 2' | translate}}</span>
+                  <strong>{{partnerData['address'] ? partnerData['address']['address_line2'] : '--'}}</strong>
+                </div>
+                <div fxLayout="column">
+                  <span class="text-md mt-1">{{'Pincode' | translate}}</span>
+                  <strong>{{partnerData['address'] ? partnerData['address']['pincode'] : '--'}}</strong>
+                </div>
+                <div fxLayout="column">
+                  <span class="text-md mt-1">{{'Country' | translate}}</span>
+                  <strong>{{partnerData['address'] ? partnerData['address']['country'] : '--'}}</strong>
+                </div>
+                <div fxLayout="column">
+                  <span class="text-md mt-1">{{'State' | translate}}</span>
+                  <strong>{{partnerData['address'] ? partnerData['address']['state'] : '--'}}</strong>
+                </div>
+                <div fxLayout="column">
+                  <span class="text-md mt-1">{{'City' | translate}}</span>
+                  <strong>{{partnerData['address'] ? partnerData['address']['city'] : '--'}}</strong>
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-tab>
+        <mat-tab>
+          <ng-template matTabLabel>{{'Billing' | translate}}</ng-template>
+          <mat-card-content class="clsCardContent pa-1">
+            <div fxLayout="row" fxLayoutAlign="start center">
+              <div class="pr-1" fxFlex>
+                <div fxLayout="column">
+                  <span class="text-md">{{'Billing Contact Name' | translate}}</span>
+                  <strong>{{partnerData['billing_contact_name'] ? partnerData['billing_contact_name'] : '--'}}</strong>
+                </div>
+                <div fxLayout="column">
+                  <span class="text-md mt-1">{{'Billing Contact Number' | translate}}</span>
+                  <strong>{{partnerData['billing_contact_number'] ? partnerData['billing_contact_number'] : '--'}}</strong>
+                </div>
+                <div fxLayout="column">
+                  <span class="text-md mt-1">{{'Billing Address Line 1' | translate}}</span>
+                  <strong>{{partnerData['billing_address'] ? partnerData['billing_address']['address_line1'] : '--'}}</strong>
+                </div>
+                <div fxLayout="column">
+                  <span class="text-md mt-1">{{'Billing Address Line 2' | translate}}</span>
+                  <strong>{{partnerData['billing_address'] ? partnerData['billing_address']['address_line2'] : '--'}}</strong>
+                </div>
+                <div fxLayout="column">
+                  <span class="text-md mt-1">{{'Pincode' | translate}}</span>
+                  <strong>{{partnerData['billing_address'] ? partnerData['billing_address']['pincode'] : '--'}}</strong>
+                </div>
+                <div fxLayout="column">
+                  <span class="text-md mt-1">{{'Country' | translate}}</span>
+                  <strong>{{partnerData['billing_address'] ? partnerData['billing_address']['country'] : '--'}}</strong>
+                </div>
+                <div fxLayout="column">
+                  <span class="text-md mt-1">{{'State' | translate}}</span>
+                  <strong>{{partnerData['billing_address'] ? partnerData['billing_address']['state'] : '--'}}</strong>
+                </div>
+                <div fxLayout="column">
+                  <span class="text-md mt-1">{{'City' | translate}}</span>
+                  <strong>{{partnerData['billing_address'] ? partnerData['billing_address']['city'] : '--'}}</strong>
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card>
+  </div>
+</div>

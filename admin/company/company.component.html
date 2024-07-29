@@ -1,0 +1,517 @@
+<mat-card class="clsCustomZeroMargin" *ngIf="'add' == data['requestAction'] || 'edit' == data['requestAction']">
+  <mat-card-title>{{ data['requestAction'] | capitalizeFirst}} Company</mat-card-title>
+  <form [formGroup]="companyForm" (ngSubmit)="submitCompanyForm(companyForm.value)">
+    <mat-card-content>
+      <mat-horizontal-stepper formArrayName="companyFormAry" [linear]="true">
+        <mat-step formGroupName="0" [stepControl]="companyFormAry?.get([0])">
+          <ng-template matStepLabel>{{'Basic' |translate }}</ng-template>
+          <div class="clsDialogScroll">
+            <div fxLayout="row" fxLayoutAlign="start center">
+              <mat-form-field class="clsCustomFullWidth">
+                <input matInput placeholder="{{'Company Name'| translate}}" formControlName="companyName" required>
+                <mat-error *ngIf="companyFormAry?.get([0])['controls']['companyName'].hasError('required') && companyFormAry?.get([0])['controls']['companyName'].touched">{{'companyNameReq' |translate}}</mat-error>
+                <mat-error *ngIf="companyFormAry?.get([0])['controls']['companyName'].errors?.minlength && companyFormAry?.get([0])['controls']['companyName'].touched">{{'companyLengthReq' |translate}}</mat-error>
+                <mat-error *ngIf="companyFormAry?.get([0])['controls']['companyName'].errors?.uniqueCompanyName && companyFormAry?.get([0])['controls']['companyName'].touched">{{'companyExists' |translate}}</mat-error>
+              </mat-form-field>
+              <div fxFlex></div>
+              <div class="clsCompanyLogoContainer pl-xs pr-xs" (click)="file.click()">
+                <img src="{{companyLogoUploadPath}}" alt="Company Logo">
+                <div class="clsCompanyLogoOverlay">
+                  <a href="javascript:void(0);" class="clsCompanyLogoIcon" title="Company Logo"><mat-icon>camera_alt</mat-icon></a>
+                </div>
+              </div>
+              <input type="file" #file (change)="onCompanyLogoChange($event)" class="clsHideElement" accept=".png, .svg, .jpg, .jpeg">
+              <input type="hidden" formControlName="companyLogo">
+            </div>
+            <mat-form-field class="clsCustomFullWidth">
+              <mat-select placeholder="{{'Company Type'|translate}}" formControlName="companyType" required>
+                <ngx-mat-select-search #searchCompanyType [noEntriesFoundLabel]="'No record found'" placeholderLabel="{{'Search'|translate}}"></ngx-mat-select-search>
+                <mat-option *ngFor="let companyType of companyTypes|search:searchCompanyType.value" [value]="companyType.value">
+                  {{ companyType.viewValue }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="companyFormAry?.get([0])['controls']['companyType'].hasError('required') && companyFormAry?.get([0])['controls']['companyType'].touched">{{'companyTypeReq'|translate}}</mat-error>
+            </mat-form-field>    
+            <mat-form-field class="clsCustomFullWidth">
+              <mat-select placeholder="{{'Industry Type'|translate}}" formControlName="industryType" required>
+                <ngx-mat-select-search #searchIndustryType [noEntriesFoundLabel]="'No record found'" placeholderLabel="{{'Search'|translate}}"></ngx-mat-select-search>
+                <mat-option *ngFor="let industryType of industryTypes|search:searchIndustryType.value" [value]="industryType.value">
+                  {{ industryType.viewValue }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="companyFormAry?.get([0])['controls']['industryType'].hasError('required') &&companyFormAry?.get([0])['controls']['industryType'].touched">{{'industryTypeReq'|translate}}</mat-error>  
+            </mat-form-field>    
+            <mat-form-field class="clsCustomFullWidth">
+              <input matInput placeholder="{{'Email'|translate}}" formControlName="email"  type="email" required>
+              <mat-error *ngIf="companyFormAry?.get([0])['controls']['email'].hasError('required') && companyFormAry?.get([0])['controls']['email'].touched">{{'emailReq'|translate}}</mat-error>
+              <mat-error *ngIf="companyFormAry?.get([0])['controls']['email'].errors?.email && companyFormAry?.get([0])['controls']['email'].touched">{{'emailInvalid'|translate}}</mat-error>
+            </mat-form-field>    
+            <mat-form-field class="clsCustomFullWidth">
+              <input matInput placeholder="{{'Website'|translate}}" formControlName="website"  type="url">
+              <mat-error *ngIf="companyFormAry?.get([0])['controls']['website'].errors?.url && companyFormAry?.get([0])['controls']['website'].touched">{{'urlInvalid'|translate}}</mat-error>
+            </mat-form-field>    
+            <mat-form-field class="clsCustomFullWidth">
+              <input matInput placeholder="{{'Mobile Number'| translate}} (Ex: +91xxxxxxxxxx)" formControlName="mobile"  type="url" required>
+              <mat-error *ngIf="companyFormAry?.get([0])['controls']['mobile'].hasError('required') && companyFormAry?.get([0])['controls']['mobile'].touched">{{'mobileReq'|translate}}</mat-error>
+              <mat-error *ngIf="companyFormAry?.get([0])['controls']['mobile'].errors?.invalidMobileNumber && companyFormAry?.get([0])['controls']['mobile'].touched">{{'mobileInvalid'|translate}}</mat-error>
+              <mat-error *ngIf="companyFormAry?.get([0])['controls']['mobile'].hasError('pattern')"> Please enter the valid mobile number. </mat-error>
+              
+            </mat-form-field>    
+            <mat-form-field class="clsCustomFullWidth">
+              <input matInput placeholder="{{'Landline'|translate}}" formControlName="landline">
+              <mat-error *ngIf="companyFormAry?.get([0])['controls']['landline'].errors?.number && companyFormAry?.get([0])['controls']['landline'].touched">{{'onlyNumReq'|translate}}</mat-error>
+              <mat-error *ngIf="companyFormAry?.get([0])['controls']['landline'].errors?.minlength && companyFormAry?.get([0])['controls']['landline'].touched">{{'landlineLengthReq'|translate}}</mat-error>
+              <mat-error *ngIf="companyFormAry?.get([0])['controls']['landline'].errors?.maxlength && companyFormAry?.get([0])['controls']['landline'].touched">{{'landlineMaxLenReq'|translate}}</mat-error>
+            </mat-form-field>
+          </div>
+          <mat-card-actions class="clsCustomZeroMargin">
+            <button mat-raised-button type="button" class="btn pr-1" color="primary" matStepperNext [disabled]="!companyFormAry.get([0])['valid']|| isButtonDisabled">{{'Next' | translate}}</button>
+            <button mat-raised-button type="button" (click)="cancel()">{{'Cancel'| translate}}</button>
+          </mat-card-actions>
+        </mat-step>
+        <mat-step formGroupName="1" [stepControl]="companyFormAry?.get([1])">
+          <ng-template matStepLabel>{{'Address' | translate }}</ng-template>
+          <div class="clsDialogScroll">
+            <mat-form-field class="clsCustomFullWidth">
+              <input matInput placeholder="{{'Address Line 1'|translate}}" formControlName="addrLine1" required>
+              <mat-error *ngIf="companyFormAry?.get([1])['controls']['addrLine1'].hasError('required') && companyFormAry?.get([1])['controls']['addrLine1'].touched">{{'addr1Req'|translate}}</mat-error>
+            </mat-form-field>  
+            <mat-form-field class="clsCustomFullWidth">
+              <input matInput placeholder="{{'Address Line 2'|translate}}" formControlName="addrLine2" required>
+              <mat-error *ngIf="companyFormAry?.get([1])['controls']['addrLine2'].hasError('required') && companyFormAry?.get([1])['controls']['addrLine2'].touched">{{'addr2Req'|translate}}</mat-error>
+            </mat-form-field>  
+            <mat-form-field class="clsCustomFullWidth">
+              <mat-select placeholder="{{'Country'|translate}}" formControlName="country" (selectionChange)="getState($event.value)" required>
+                <ngx-mat-select-search #searchCountry [noEntriesFoundLabel]="'No record found'" placeholderLabel="Search"></ngx-mat-select-search>
+                <mat-option *ngFor="let country of countryAry | search:searchCountry.value" [value]="country.name">
+                  {{ country.name }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="companyFormAry?.get([1])['controls']['country'].hasError('required') && companyFormAry?.get([1])['controls']['country'].touched">{{'countryReq'|translate}}</mat-error>
+            </mat-form-field>                
+            <mat-form-field class="clsCustomFullWidth">
+              <mat-select placeholder="{{'State'|translate}}" formControlName="state" (selectionChange)="getCity($event.value)" required>
+                <ngx-mat-select-search #searchState [noEntriesFoundLabel]="'No record found'" placeholderLabel="Search"></ngx-mat-select-search>
+                <mat-option *ngFor="let state of stateAry | search:searchState.value" [value]="state.name">
+                  {{ state.name }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="companyFormAry?.get([1])['controls']['state'].hasError('required') && companyFormAry?.get([1])['controls']['state'].touched">{{'stateReq'|translate}}</mat-error>
+            </mat-form-field>  
+            <mat-form-field class="clsCustomFullWidth">
+              <mat-select placeholder="{{'City'|translate}}" formControlName="city" required>
+                <ngx-mat-select-search #searchCity [noEntriesFoundLabel]="'No record found'" placeholderLabel="Search"></ngx-mat-select-search>
+                <mat-option *ngFor="let city of cityAry | search:searchCity.value" [value]="city.name">
+                  {{ city.name }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="companyFormAry?.get([1])['controls']['city'].hasError('required') && companyFormAry?.get([1])['controls']['city'].touched">{{'cityReq'|translate}}</mat-error>
+            </mat-form-field>
+            <mat-form-field class="clsCustomFullWidth">	
+              <input matInput placeholder="{{'Pincode'|translate}}" formControlName="pincode" (keydown)="OnCountryChange($event)" required>	
+             <mat-error *ngIf="companyFormAry?.get([1])['controls']['pincode'].hasError('required') && companyFormAry?.get([1])['controls']['pincode'].touched">{{'pincodeReq'|translate}}</mat-error>	
+             <!-- <mat-error *ngIf="companyFormAry?.get([1])['controls']['pincode'].hasError('pattern')"> Enter Valid Pincode. </mat-error> -->	
+              <!-- <mat-error *ngIf="companyFormAry?.get([1])['controls']['pincode'].errors?.number && companyFormAry?.get([1])['controls']['pincode'].touched">{{'onlyNumReq'|translate}}</mat-error> -->	
+                <mat-error *ngIf="companyFormAry?.get([1])['controls']['pincode'].errors?.minlength && companyFormAry?.get([1])['controls']['pincode'].touched">{{'pincodeMinLenReq'|translate}}</mat-error> 	
+               <mat-error *ngIf="companyFormAry?.get([1])['controls']['pincode'].errors?.maxlength && companyFormAry?.get([1])['controls']['pincode'].touched">{{'pincodeMaxLenReq'|translate}}</mat-error> 	
+            </mat-form-field>  
+
+              <!-- start new fild user Email -->
+              <mat-form-field class="clsCustomFullWidth">
+                <input matInput placeholder="{{'User Email'|translate}}" formControlName="user_email"  type="email"  />
+                <mat-error *ngIf="companyFormAry?.get([1])['controls']['user_email'].hasError('required') && companyFormAry?.get([1])['controls']['user_email'].touched">{{'emailInvalid'|translate}}</mat-error>
+              </mat-form-field>
+               <!--End new fild user Email -->
+               
+  
+               <!-- start new fild End date -->
+              <mat-form-field  class="clsCustomFullWidth">
+                <input matInput placeholder="{{'End Date'| translate}}" formControlName="end_date"  autocomplete="off" ngxDaterangepickerMd [singleDatePicker]="true" [autoApply]="true" />
+              </mat-form-field>
+               <!-- end new fild End date -->
+          </div>
+          <mat-card-actions class="clsCustomZeroMargin">
+            <button mat-raised-button type="button" class="btn pr-1" color="primary" matStepperPrevious>{{'Previous' | translate}}</button>
+            <button mat-raised-button type="button" class="btn pr-1" color="primary" matStepperNext [disabled]="!companyFormAry.get([1])['valid']|| isButtonDisabled">{{'Next' | translate}}</button>
+            <button mat-raised-button type="button" (click)="cancel()">{{'Cancel'| translate}}</button>
+          </mat-card-actions>
+        </mat-step>
+        <mat-step formGroupName="2" [stepControl]="companyFormAry?.get([2])">
+          <ng-template matStepLabel>{{'Billing'| translate }}</ng-template>
+          <div class="clsDialogScroll">
+            <mat-checkbox formControlName="isChecked" (click)="sameAsAbove()"> SAME AS ABOVE</mat-checkbox>
+            <mat-form-field class="clsCustomFullWidth">
+              <input matInput placeholder="{{'Billing Contact Name'|translate}}" formControlName="billingCntName" required>
+              <mat-error *ngIf="companyFormAry?.get([2])['controls']['billingCntName'].hasError('required') && companyFormAry?.get([2])['controls']['billingCntName'].touched">{{'billCntNameReq'|translate}}</mat-error>
+              <mat-error *ngIf="companyFormAry?.get([2])['controls']['billingCntName'].errors?.minlength && companyFormAry?.get([2])['controls']['billingCntName'].touched">{{'billingLengthReq'|translate}}</mat-error>
+            </mat-form-field>
+            <mat-form-field class="clsCustomFullWidth">
+              <input matInput placeholder="{{'Billing Contact Number (Ex: +91xxxxxxxxxx)'|translate}}" formControlName="billingCntNo" required>
+              <mat-error *ngIf="companyFormAry?.get([2])['controls']['billingCntNo'].hasError('required') && companyFormAry?.get([2])['controls']['billingCntNo'].touched">{{'billCntNumberReq'|translate}}</mat-error>
+              <mat-error *ngIf="companyFormAry?.get([2])['controls']['billingCntNo'].errors?.invalidMobileNumber && companyFormAry?.get([2])['controls']['billingCntNo'].touched">{{'billingInvalid'|translate}}</mat-error>
+            </mat-form-field>
+            <mat-form-field class="clsCustomFullWidth">
+              <input matInput placeholder="{{'Billing Address Line 1'|translate}}" formControlName="billingAddrLine1" required>
+              <mat-error *ngIf="companyFormAry?.get([2])['controls']['billingAddrLine1'].hasError('required') && companyFormAry?.get([2])['controls']['billingAddrLine1'].touched">{{'billingAdd1Req'|translate}}</mat-error>
+            </mat-form-field>              
+            <mat-form-field class="clsCustomFullWidth">
+              <input matInput placeholder="{{'Billing Address Line 2'|translate}}" formControlName="billingAddrLine2" required>
+              <mat-error *ngIf="companyFormAry?.get([2])['controls']['billingAddrLine2'].hasError('required') && companyFormAry?.get([2])['controls']['billingAddrLine2'].touched">{{'billingAdd2Req'|translate}}</mat-error>
+            </mat-form-field>
+         
+            <mat-form-field class="clsCustomFullWidth">
+              <mat-select placeholder="{{'Billing Country'|translate}}" formControlName="billingCountry" (selectionChange)="getState($event.value,1)" required>       
+                <ngx-mat-select-search #searchBillingCountry [noEntriesFoundLabel]="'No record found'" placeholderLabel="{{'Search'|translate}}"></ngx-mat-select-search>
+                <mat-option *ngFor="let country of billingCountryAry | search:searchBillingCountry.value" [value]="country.name">
+                  {{ country.name }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="companyFormAry?.get([2])['controls']['billingCountry'].hasError('required') && companyFormAry?.get([2])['controls']['billingCountry'].touched">{{'billingCountryReq'|translate}}</mat-error>
+            </mat-form-field>
+            <mat-form-field class="clsCustomFullWidth">
+              <mat-select placeholder="{{'Billing State'|translate}}" formControlName="billingState" (selectionChange)="getCity($event.value,1)" required>
+                <ngx-mat-select-search #searchBillingState [noEntriesFoundLabel]="'No record found'" placeholderLabel="{{'Search'|translate}}"></ngx-mat-select-search>
+                <mat-option *ngFor="let state of billingStateAry | search:searchBillingState.value" [value]="state.name">
+                  {{ state.name }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="companyFormAry?.get([2])['controls']['billingState'].hasError('required') && companyFormAry?.get([2])['controls']['billingState'].touched">{{'billingStateReq'|translate}}</mat-error>
+            </mat-form-field>
+            <mat-form-field class="clsCustomFullWidth">
+              <mat-select placeholder="{{'Billing City'|translate}}" formControlName="billingCity"  required>
+                <ngx-mat-select-search #searchBillingCity [noEntriesFoundLabel]="'No record found'" placeholderLabel="{{'Search'|translate}}"></ngx-mat-select-search>
+                <mat-option *ngFor="let city of billingCityAry | search:searchBillingCity.value" [value]="city.name">
+                  {{ city.name}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="companyFormAry?.get([2])['controls']['billingCity'].hasError('required') && companyFormAry?.get([2])['controls']['billingCity'].touched">{{'billingCityReq'|translate}}</mat-error>
+            </mat-form-field>
+            <mat-form-field class="clsCustomFullWidth">	
+              <input matInput placeholder="{{'Billing Pincode'|translate}}" formControlName="billingPincode" (keydown)="OnBillingCountryChange($event)"  required>	
+              <mat-error *ngIf="companyFormAry?.get([2])['controls']['billingPincode'].hasError('required') && companyFormAry?.get([2])['controls']['billingPincode'].touched">{{'billingPinReq'|translate}}</mat-error>	
+              <mat-error *ngIf="companyFormAry?.get([2])['controls']['billingPincode'].errors?.minlength && companyFormAry?.get([2])['controls']['billingPincode'].touched">{{'billingPinMinLenReq'|translate}}</mat-error>	
+              <mat-error *ngIf="companyFormAry?.get([2])['controls']['billingPincode'].errors?.maxlength && companyFormAry?.get([2])['controls']['billingPincode'].touched">{{'billingPinMaxLenReq'|translate}}</mat-error> 	
+            </mat-form-field>
+            <mat-form-field class="clsCustomFullWidth">
+              <mat-select placeholder="{{'Payment Mode'|translate}}" formControlName="paymentMode"  required>
+                <mat-option *ngFor="let paymentMode of paymentModes" [value]="paymentMode.value">
+                  {{ paymentMode.viewValue }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="companyFormAry?.get([2])['controls']['paymentMode'].hasError('required') && companyFormAry?.get([2])['controls']['paymentMode'].touched">{{'paymentModeReq'|translate}}</mat-error>
+            </mat-form-field>
+            <mat-form-field class="clsCustomFullWidth">
+              <mat-select placeholder="{{'Currency'|translate}}" formControlName="currency"  required>
+                <mat-option *ngFor="let currency of currencies" [value]="currency.value">
+                  {{ currency.viewValue }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="companyFormAry?.get([2])['controls']['currency'].hasError('required') && companyFormAry?.get([2])['controls']['currency'].touched">{{'currencyReq'|translate}}</mat-error>
+            </mat-form-field>
+          </div>
+          <mat-card-actions class="clsCustomZeroMargin">
+            <button mat-raised-button type="button" class="btn pr-1" color="primary" matStepperPrevious>{{'Previous' | translate}}</button>
+            <button mat-raised-button type="submit" class="btn pr-1" color="primary" matStepperNext [disabled]="!companyForm.valid || isButtonDisabled">{{'Submit'|translate}}</button>
+            <button mat-raised-button type="button" (click)="cancel()">{{'Cancel'| translate}}</button>
+          </mat-card-actions>
+        </mat-step>
+      </mat-horizontal-stepper>
+    </mat-card-content>
+  </form>
+</mat-card>
+
+<mat-card class="clsCustomZeroMargin" *ngIf="'license' == data['requestAction']">
+  <mat-card-title class="pa-1">{{'Edit License'|translate}}</mat-card-title>
+  <form [formGroup]="companyLicenseForm" (ngSubmit)='submitCompanyLicenseForm(companyLicenseForm.value)'>
+    <mat-horizontal-stepper formArrayName="companyLicenseFormAry" [linear]="false">
+      <mat-step  formGroupName="0" [stepControl]="companyLicenseFormAry?.get([0])">
+        <ng-template matStepLabel>{{'Basic' |translate }}</ng-template>
+        <div class="clsDialogScroll">
+          <mat-form-field class="clsCustomFullWidth">
+            <input matInput placeholder="{{'License Number'|translate}}" formControlName="licenseNo">
+          </mat-form-field>
+          <mat-form-field class="clsCustomFullWidth">
+            <input matInput type="date" placeholder="{{'Validity'|translate}}" formControlName="validity" required>
+            <mat-error *ngIf="companyLicenseFormAry?.get([0])['controls']['validity'].hasError('required') && companyLicenseFormAry?.get([0])['controls']['validity'].touched">{{'validReq'|translate}}</mat-error>
+            <mat-error *ngIf="companyLicenseFormAry?.get([0])['controls']['validity'].errors?.date && companyLicenseFormAry?.get([0])['controls']['validity'].touched">{{'dateInvalid'|translate}}</mat-error>
+          </mat-form-field>
+          <mat-form-field class="clsCustomFullWidth">
+            <input matInput placeholder="{{'PO Number'|translate}}" formControlName="poNo">
+          </mat-form-field>
+          <mat-form-field class="clsCustomFullWidth">
+            <input matInput placeholder="{{'Number of Users'|translate}}" formControlName="noOfUsers" required>
+            <mat-error *ngIf="companyLicenseFormAry?.get([0])['controls']['noOfUsers'].hasError('required') && companyLicenseFormAry?.get([0])['controls']['noOfUsers'].touched">{{'numberUserReq'|translate}}</mat-error>
+            <mat-error *ngIf="companyLicenseFormAry?.get([0])['controls']['noOfUsers'].errors?.number && companyLicenseFormAry?.get([0])['controls']['noOfUsers'].touched">{{'onlyNumReq'|translate}}</mat-error>
+          </mat-form-field>
+          <mat-form-field class="clsCustomFullWidth">
+            <input matInput placeholder="{{'Number of Nodes'|translate}}" formControlName="noOfNodes" required>
+            <mat-error *ngIf="companyLicenseFormAry?.get([0])['controls']['noOfNodes'].hasError('required') && companyLicenseFormAry?.get([0])['controls']['noOfNodes'].touched">{{'numberOfNodeReq'|translate}}</mat-error>
+            <mat-error *ngIf="companyLicenseFormAry?.get([0])['controls']['noOfNodes'].errors?.number && companyLicenseFormAry?.get([0])['controls']['noOfNodes'].touched">{{'onlyNumReq'|translate}}</mat-error>
+          </mat-form-field>
+          <mat-form-field class="clsCustomFullWidth">
+            <input matInput placeholder="{{'Dunning Days'|translate}}" formControlName="dunningDays" required>
+            <mat-error *ngIf="companyLicenseFormAry?.get([0])['controls']['dunningDays'].hasError('required') && companyLicenseFormAry?.get([0])['controls']['dunningDays'].touched">{{'dunningDaysReq'|translate}}</mat-error>
+            <mat-error *ngIf="companyLicenseFormAry?.get([0])['controls']['dunningDays'].errors?.number && companyLicenseFormAry?.get([0])['controls']['dunningDays'].touched">{{'onlyNumReq'|translate}}</mat-error>
+          </mat-form-field>
+          <mat-form-field class="clsCustomFullWidth">
+            <input matInput placeholder="{{'Grace Days'|translate}}" formControlName="graceDays" required>
+            <mat-error *ngIf="companyLicenseFormAry?.get([0])['controls']['graceDays'].hasError('required') && companyLicenseFormAry?.get([0])['controls']['graceDays'].touched">{{'graceDaysReq'|translate}}</mat-error>
+            <mat-error *ngIf="companyLicenseFormAry?.get([0])['controls']['graceDays'].errors?.number && companyLicenseFormAry?.get([0])['controls']['graceDays'].touched">{{'onlyNumReq'|translate}}</mat-error>
+          </mat-form-field>
+          <mat-form-field class="clsCustomFullWidth">
+            <mat-select placeholder="{{'Select Risk Category'|translate}}" formControlName="riskCategory">
+              <mat-option *ngFor="let category of riskCategoryList" [value]="category.value">
+                {{ category.value }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="clsCustomFullWidth">
+            <input matInput placeholder="{{'Number of SMS'|translate}}" formControlName="noOfSms">          
+          </mat-form-field>
+          <mat-form-field class="clsCustomFullWidth">
+            <input matInput placeholder="{{'Number of Emails'|translate}}" formControlName="noOfEmails">           
+          </mat-form-field>
+        </div>
+        <mat-card-actions class="clsCustomZeroMargin">
+          <button mat-raised-button type="button" class="btn pr-1" color="primary" matStepperNext [disabled]="!companyLicenseFormAry.get([0])['valid']|| isButtonDisabled">{{'Next' | translate}}</button>
+          <button mat-raised-button type="button" (click)="cancel()">{{'Cancel'| translate}}</button>
+        </mat-card-actions>
+      </mat-step>
+      <mat-step formGroupName="1" [stepControl]="companyLicenseFormAry?.get([1])">
+        <ng-template matStepLabel>{{'Module' |translate }}</ng-template>
+        <mat-card-actions class="clsCustomZeroMargin">
+          <button mat-raised-button type="button" class="btn pr-1" color="primary" matStepperPrevious>{{'Previous' | translate}}</button>
+          <button mat-raised-button  type="submit" class="btn pr-1" color="primary" matStepperNext [disabled]="!companyLicenseForm.valid || isButtonDisabled">{{'Submit'|translate}}</button>
+          <button mat-raised-button type="button" (click)="cancel()">{{'Cancel'| translate}}</button>
+        </mat-card-actions>
+      </mat-step>
+    </mat-horizontal-stepper>
+  </form>
+</mat-card>
+
+<mat-card class="clsCustomZeroMargin" *ngIf="'smsHistory' == data['requestAction']">
+  <mat-card-title>{{'SMS Recharge'|translate}}</mat-card-title>
+  <form #form="ngForm" [formGroup]="smsForm" (ngSubmit)="submitSmsForm(form.form)">
+    <mat-card-content class="clsDialogScroll"> 
+      <mat-form-field class="clsCustomFullWidth">
+        <input matInput placeholder="{{'SMS Count'|translate}}" formControlName="smsCount" value="0">
+      </mat-form-field>
+      <label>{{'SMS History'|translate}}</label>
+      <table mat-table [dataSource]="smsTblList" class="clsCustomFullWidth mt-1" matSort matSortDirection="asc">
+        <ng-container matColumnDef="row.added_datetime">
+          <th width="600px" mat-header-cell *matHeaderCellDef mat-sort-header> {{'Date'|translate}} </th>
+          <td width="600px" mat-cell *matCellDef="let row"> {{row.added_datetime}} </td>
+        </ng-container>
+        <ng-container matColumnDef="row.sms_count">
+          <th width="600px" mat-header-cell *matHeaderCellDef mat-sort-header>{{'SMS Count'|translate}}</th>
+          <td width="600px" mat-cell *matCellDef="let row">{{row.sms_count}}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+      <div class="clsCustomTblNoRecordsMsg" *ngIf="!smsTblList">
+        <span>{{'No records found'|translate}}</span>
+      </div>
+      <mat-paginator style="display: flex; align-items: left;" [pageSizeOptions]="tableConfig['pageSizeOptions']"></mat-paginator>
+    </mat-card-content>  
+    <mat-card-actions class="clsCustomZeroMargin">
+      <button mat-raised-button type="submit" class="btn pr-1" color="primary" [disabled]="!smsForm.valid || isButtonDisabled">{{'Submit'|translate}}</button>
+      <button mat-raised-button type="button" (click)="cancel()">{{'Cancel'| translate}}</button>
+    </mat-card-actions>
+  </form>
+</mat-card>
+
+<mat-card class="clsCustomZeroMargin" *ngIf="'licenseDetails' == data['requestAction']">
+  <mat-card-title class="pa-1">{{'Edit license details'|translate}}</mat-card-title>
+  <form [formGroup]="licenseDetailsForm" (ngSubmit)='submitLicenseDetailsForm(licenseDetailsForm)'>
+    <mat-card-content>
+      <!-- <mat-horizontal-stepper formArrayName="companyLicenseFormAry" [linear]="false">
+        <mat-step formGroupName="0" [stepControl]="companyLicenseFormAry?.get([0])"> -->
+      <!-- <ng-template matStepLabel>{{'Basic' |translate }}</ng-template> -->
+      <div class="clsDialogScroll">
+        <mat-form-field class="clsCustomFullWidth">
+          <input matInput placeholder="{{'Invoice date'|translate}}" formControlName="invoiceDate" type="date" required>
+          <mat-error
+            *ngIf="licenseDetailsForm?.get(['invoiceDate']).hasError('required') && licenseDetailsForm?.get(['invoiceDate']).touched">{{'Invoice Date Is Required'|translate}}</mat-error>
+          <mat-error
+            *ngIf="licenseDetailsForm?.get(['invoiceDate']).errors?.date && licenseDetailsForm?.get(['invoiceDate']).touched">{{'dateInvalid'|translate}}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="clsCustomFullWidth">
+          <input matInput placeholder="{{'Active date'|translate}}" formControlName="activeDate" type="date" required>
+          <mat-error
+            *ngIf="licenseDetailsForm?.get(['activeDate']).hasError('required') && licenseDetailsForm?.get(['activeDate']).touched">{{'Active Date Is Required'|translate}}</mat-error>
+          <mat-error
+            *ngIf="licenseDetailsForm?.get(['activeDate']).errors?.date && licenseDetailsForm?.get(['activeDate']).touched">{{'dateInvalid'|translate}}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="clsCustomFullWidth">
+          <input matInput placeholder="{{'Expiry Date (in months)'|translate}}" formControlName="duration" type="number" required>
+          <!-- <mat-select placeholder="{{'Expiry Date (in months)'|translate}}" formControlName="duration" required>
+            <ngx-mat-select-search #searchPartner placeholderLabel="{{'Search'| translate}}"
+              [noEntriesFoundLabel]="'No record found'"></ngx-mat-select-search>
+            <mat-option *ngFor="let item of duration|search:searchPartner.name" [value]="item.duration">
+              {{ item.name }}
+            </mat-option>
+          </mat-select> -->
+          <mat-error
+            *ngIf="licenseDetailsForm?.get(['duration']).hasError('required') && licenseDetailsForm?.get(['duration']).touched">{{'Expiry Date (in months) Is Required'|translate}}</mat-error>
+        </mat-form-field>
+
+
+      </div>
+      <mat-card-actions class="clsCustomZeroMargin">
+        <button mat-raised-button type="submit" class="pr-1" title="{{'Submit' | translate}}" color="primary"
+          [disabled]="!licenseDetailsForm.valid || isButtonDisabled">{{'Submit' | translate}}</button>
+        <button mat-raised-button type="button" title="{{'Cancel'| translate}}" (click)="cancel()">{{'Cancel'|
+          translate}}</button>
+      </mat-card-actions>
+      <!-- </mat-step>
+      </mat-horizontal-stepper> -->
+    </mat-card-content>
+  </form>
+</mat-card>
+
+<mat-card class="clsCustomZeroMargin" *ngIf="'sim' == data['requestAction']">
+  <mat-card-title class="pa-1">{{'SIM Manage'|translate}} 
+    <button mat-raised-button class="pr-1" (click)="simTableOpen()" title="{{simLabel | translate}}" color="dark" style="float: right;">{{simLabel | translate}}</button>
+  </mat-card-title>
+  <form [formGroup]="simManageForm" (ngSubmit)='submitSimDetailsForm(simManageForm)' *ngIf="simtable">
+    <mat-card-content>
+      <!-- <mat-horizontal-stepper formArrayName="companyLicenseFormAry" [linear]="false">
+        <mat-step formGroupName="0" [stepControl]="companyLicenseFormAry?.get([0])"> -->
+      <!-- <ng-template matStepLabel>{{'Basic' |translate }}</ng-template> -->
+      <div class="clsDialogScroll">
+
+        <div fxLayout="column">
+
+          <div fxLayout="row" fxLayoutAlign="space-between center" style="padding: 10px 0;">
+
+            <div fxFlex.gt-lg="47.5" fxFlex.lg="47.5" fxFlex.gt-md="47.5" fxFlex.gt-xs="47.5" fxFlex="100">
+              <mat-form-field class="clsCustomFullWidth">
+                <mat-select placeholder="{{'Gateway'|translate}}" formControlName="getwayName" (selectionChange)="checkId($event)" required>
+                  <ngx-mat-select-search #searchPartner placeholderLabel="{{'Search'| translate}}"
+                    [noEntriesFoundLabel]="'No record found'"></ngx-mat-select-search>
+                  <mat-option *ngFor="let item of gatewaysList|search:searchPartner.device_name" [value]="item.device_name">
+                    {{ item.device_name }}
+                  </mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="simManageForm?.get(['getwayName']).hasError('required') && simManageForm?.get(['getwayName']).touched">{{'Gateway Is Required'|translate}}</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div fxFlex.gt-lg="47.5" fxFlex.lg="47.5" fxFlex.gt-md="47.5" fxFlex.gt-xs="47.5" fxFlex="100">
+              <mat-form-field class="clsCustomFullWidth">
+                <input matInput placeholder="{{'Gateway Id'|translate}}" formControlName="getwayId" type="text"
+                  required readonly>
+                <mat-error
+                  *ngIf="simManageForm?.get(['getwayId']).hasError('required') && simManageForm?.get(['getwayId']).touched">{{'Gateway Id Is Required'|translate}}</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div fxLayout="row" fxLayoutAlign="space-between center" style="padding: 10px 0;">
+
+            <div fxFlex.gt-lg="47.5" fxFlex.lg="47.5" fxFlex.gt-md="47.5" fxFlex.gt-xs="47.5" fxFlex="100">
+              <mat-form-field class="clsCustomFullWidth">
+                <mat-select placeholder="{{'Gateway Type'|translate}}" formControlName="gateway" required (selectionChange)="checkType($event)">
+                  <ngx-mat-select-search #searchPartner placeholderLabel="{{'Search'| translate}}"
+                    [noEntriesFoundLabel]="'No record found'"></ngx-mat-select-search>
+                  <mat-option *ngFor="let item of gatewaysType|search:searchPartner.name" [value]="item.name">
+                    {{ item.name }}
+                  </mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="simManageForm?.get(['gateway']).hasError('required') && simManageForm?.get(['gateway']).touched">{{'Gateway Is Required'|translate}}</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div fxFlex.gt-lg="47.5" fxFlex.lg="47.5" fxFlex.gt-md="47.5" fxFlex.gt-xs="47.5" fxFlex="100">
+              <mat-form-field class="clsCustomFullWidth">
+                <mat-select placeholder="{{'Network'|translate}}" formControlName="network" required>
+                  <ngx-mat-select-search #searchPartner placeholderLabel="{{'Search'| translate}}"
+                    [noEntriesFoundLabel]="'No record found'"></ngx-mat-select-search>
+                  <mat-option *ngFor="let item of networks|search:searchPartner.name" [value]="item.name">
+                    {{ item.name }}
+                  </mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="simManageForm?.get(['network']).hasError('required') && simManageForm?.get(['network']).touched">{{'Network Is Required'|translate}}</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="space-between center" style="padding: 10px 0;">
+            <div fxFlex.gt-lg="47.5" fxFlex.lg="47.5" fxFlex.gt-md="47.5" fxFlex.gt-xs="47.5" fxFlex="100">
+              <mat-form-field class="clsCustomFullWidth">
+                <input matInput placeholder="{{'SIM Number'|translate}}" formControlName="number" type="text"
+                  required>
+                <mat-error
+                  *ngIf="simManageForm?.get(['number']).hasError('required') && simManageForm?.get(['number']).touched">{{'SIM Number Is Required'|translate}}</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div fxFlex.gt-lg="47.5" fxFlex.lg="47.5" fxFlex.gt-md="47.5" fxFlex.gt-xs="47.5" fxFlex="100">
+              <mat-form-field class="clsCustomFullWidth">
+                <input matInput placeholder="{{'IMEI Number'|translate}}" formControlName="imei" type="text"
+                  required>
+                <mat-error
+                  *ngIf="simManageForm?.get(['imei']).hasError('required') && simManageForm?.get(['imei']).touched">{{'IMEI Number Is Required'|translate}}</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          
+        </div>
+
+      </div>
+      <mat-card-actions class="clsCustomZeroMargin">
+        <button mat-raised-button type="submit" class="pr-1" title="{{'Submit' | translate}}" color="primary"
+          [disabled]="!simManageForm.valid || isButtonDisabled">{{'Submit' | translate}}</button>
+        <button mat-raised-button type="button" title="{{'Cancel'| translate}}" (click)="cancel()">{{'Cancel'|
+          translate}}</button>
+      </mat-card-actions>
+      <!-- </mat-step>
+      </mat-horizontal-stepper> -->
+    </mat-card-content>
+  </form>
+
+  <table mat-table [dataSource]="simManageTblList" class="clsCustomFullWidth mt-1" matSort matSortDirection="asc" *ngIf="!simtable">
+    <ng-container matColumnDef="gateway">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'Gateway'|translate}} </th>
+      <td mat-cell *matCellDef="let row"> {{row.getwayName}} </td>
+    </ng-container>
+    <ng-container matColumnDef="gatewayId">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'Gateway Id'|translate}} </th>
+      <td mat-cell *matCellDef="let row"> {{row.getwayId}} </td>
+    </ng-container>
+    <ng-container matColumnDef="gatewayType">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'Gateway Type'|translate}} </th>
+      <td mat-cell *matCellDef="let row"> {{row.gateway}} </td>
+    </ng-container>
+    <ng-container matColumnDef="network">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'Network'|translate}}</th>
+      <td mat-cell *matCellDef="let row">{{row.network}}</td>
+    </ng-container>
+    <ng-container matColumnDef="number">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'SIM Number'|translate}}</th>
+      <td mat-cell *matCellDef="let row">{{row.number}}</td>
+    </ng-container>
+    <ng-container matColumnDef="imei">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'IMEI Number'|translate}}</th>
+      <td mat-cell *matCellDef="let row">{{row.imei}}</td>
+    </ng-container>
+    <!-- <ng-container matColumnDef="Actions">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'Action'|translate}}</th>
+      <td mat-cell *matCellDef="let row">{{row.imei}}</td>
+    </ng-container> -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns1;"></tr>
+  </table>
+  <div class="clsCustomTblNoRecordsMsg" *ngIf="!simManageTblList && !simtable">
+    <span>{{'No records found'|translate}}</span>
+  </div>
+  <mat-paginator style="display: flex; align-items: left;" [pageSizeOptions]="tableConfig['pageSizeOptions']" *ngIf="!simtable"></mat-paginator>
+  <br>
+  <button mat-raised-button type="button" title="{{'Cancel'| translate}}" (click)="cancel()" *ngIf="!simtable">{{'Cancel'|
+    translate}}</button>
+</mat-card>

@@ -1,0 +1,24 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row></mat-toolbar-row>
+  <mat-toolbar-row></mat-toolbar-row>
+</mat-toolbar>
+<div fxLayout="row wrap" fxLayoutAlign="center start">
+  <div fxFlex.gt-sm="55" fxFlex="100">
+    <mat-card class="clsMatCard pa-0" style="min-height:560px">
+      <mat-tab-group>
+        <mat-tab>
+          <ng-template matTabLabel>{{'Basic'|translate}}</ng-template>
+          <app-profile-basic></app-profile-basic>
+        </mat-tab>
+        <mat-tab>
+          <ng-template matTabLabel>{{'Security'|translate}}</ng-template>
+          <app-profile-security></app-profile-security>
+        </mat-tab>
+        <mat-tab>
+          <ng-template matTabLabel>{{'Localization'|translate}}</ng-template>
+          <app-profile-regional></app-profile-regional>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card>
+  </div>
+</div>

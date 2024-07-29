@@ -1,0 +1,98 @@
+<mat-card class="clsCustomZeroPadding">
+  <div fxLayout="row" fxFlex="100" fxLayoutAlign="start center">
+    <mat-card-title class="clsCustomMatCardTitle mb-0">{{'Manage Companies' | translate}}</mat-card-title>
+  </div>
+</mat-card>
+<div fxLayout="row wrap" fxLayoutAlign="start center" class="clsListWithSearch">
+  <div fxFlex="98">
+    <mat-card class="clsCustomZeroPadding">
+      <div class="search-bar">
+        <form class="clsCustomSearch">
+          <mat-icon title="{{'Search'|translate}}">search</mat-icon>
+          <input type="text" placeholder="{{'Search'|translate}}" autofocus="true" (keyup)='updateFilter($event.target.value)' />
+        </form>
+      </div>
+    </mat-card>
+  </div>
+  <div fxFlex="2">
+    <button mat-icon-button (click)="getPartnerCompanyList()">
+      <mat-icon title="Refresh">refresh</mat-icon>
+    </button>
+  </div>
+</div>
+<mat-card class="clsCustomZeroPadding">
+  <mat-card-content>
+    <div class="mat-elevation-z8">
+      <table mat-table [dataSource]="companyTblList" matSort matSortActive="company_name" matSortDirection="asc">
+        <ng-container matColumnDef="company_name">
+          <th width="1000" mat-header-cell *matHeaderCellDef mat-sort-header> {{'Company'|translate}} </th>
+          <td width="1000" mat-cell *matCellDef="let row"> {{row.company_name}} </td>
+        </ng-container>
+        <ng-container matColumnDef="connectedNodeCount">
+          <th width="1000" mat-header-cell *matHeaderCellDef mat-sort-header> {{'Status'|translate}} </th>
+          <td width="1000" mat-cell *matCellDef="let row">
+            <button mat-icon-button title="{{'Total'|translate}}">
+              <mat-icon>memory</mat-icon>
+              <span class="clsIconCntLabel">{{row.totalNodeCount}}</span>
+            </button>
+            <button mat-icon-button title="{{'Connected'|translate}}">
+              <mat-icon svgIcon="custom:memory_on"></mat-icon>
+              <span class="clsIconCntLabel">{{row.connectedNodeCount}}</span>
+            </button>
+            <button mat-icon-button title="{{'Disconnected'|translate}}">
+              <mat-icon svgIcon="custom:memory_off"></mat-icon>
+              <span class="clsIconCntLabel">{{row.totalNodeCount - row.connectedNodeCount}}</span>
+            </button>
+          </td>
+        </ng-container>
+        <!-- <ng-container matColumnDef="added_datetime">
+          <th width="300" mat-header-cell *matHeaderCellDef mat-sort-header> {{'Added On'|translate}} </th>
+          <td width="300" mat-cell *matCellDef="let row"> {{row.added_datetime| date: datePipe}} </td>
+        </ng-container> -->
+        <ng-container matColumnDef="activeDate">
+          <th width="300" mat-header-cell *matHeaderCellDef mat-sort-header> {{'Active Date'|translate}} </th>
+          <td width="300" mat-cell *matCellDef="let row"> {{row.activeDate| date: datePipe}} </td>
+        </ng-container>
+        <ng-container matColumnDef="expiryDate">
+          <th width="300" mat-header-cell *matHeaderCellDef mat-sort-header> {{'Expiry Date'|translate}} </th>
+          <td width="300" mat-cell *matCellDef="let row"> {{row.expiryDate| date: datePipe}} </td>
+        </ng-container>
+        <ng-container matColumnDef="Actions">
+          <th width="1000" mat-header-cell *matHeaderCellDef mat-sort-header> {{'Actions'|translate}} </th>
+          <td width="1000" mat-cell *matCellDef="let row">
+            <button mat-icon-button title="Switch to company admin" (click)="opendialog(row)">
+              <mat-icon class="mat-20">launch</mat-icon>
+            </button>
+            <button mat-icon-button title="Edit company" (click)="open('edit',row)">
+              <mat-icon class="mat-20">edit</mat-icon>
+            </button>
+            <button mat-icon-button title="Delete company" (click)="delete(row)">
+              <mat-icon>delete</mat-icon>
+            </button>
+            <button mat-icon-button title="{{'Actions'|translate}}" [matMenuTriggerFor]="actionsMenu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #actionsMenu="matMenu" xPosition="before">
+              <button mat-menu-item (click)="addUser(row)">{{'Add User'|translate}}</button>
+              <button mat-menu-item (click)="companyUserList(row.company_id)">{{'User List'|translate}}</button>
+              <button mat-menu-item (click)="open('license',row)">{{'Company License'|translate}}</button>
+              <button mat-menu-item (click)="open('smsHistory',row)">{{'SMS History'|translate}}</button>
+
+              <button mat-menu-item (click)="open('licenseDetails',row)">{{'License Details'|translate}}</button>
+              <button mat-menu-item (click)="open('sim',row)">{{'Sim Manage'|translate}}</button>
+            </mat-menu>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+      <div class="clsCustomTblNoRecordsMsg" *ngIf="!companyTblList">
+        <span>{{'No records found'|translate}}</span>
+      </div>
+      <mat-paginator style="display: flex; align-items: left;" [pageSizeOptions]="tableConfig['pageSizeOptions']"></mat-paginator>
+    </div>
+  </mat-card-content>
+</mat-card>
+<button mat-fab color="warn" class="mat-fab-bottom-right" (click)="open('add','')">
+  <mat-icon class="mat-24">add</mat-icon>
+</button>

@@ -1,0 +1,34 @@
+<div fxLayout="row" fxLayoutAlign="center start" class="pt-1" style="padding-left: 0.5rem;">
+  <div fxFlex.gt-lg="100" fxFlex.lg="100" fxFlex.gt-md="100" fxFlex.md="100" fxFlex.sm="50" fxFlex="100" fxHide="false" fxHide.xs>
+    <mat-form-field class="clsCustomFullWidth clsCustomSearch">
+      <input matInput placeholder="{{'Search'| translate}}" #searchStr>
+    </mat-form-field>
+  </div>
+</div>
+
+<div fxLayout="row wrap">
+  <div fxFlex.gt-lg="20" fxFlex.lg="25" fxFlex.md="33.33" fxFlex.sm="33.33" fxFlex.xs="100" fxFlex="100" *ngFor="let app of apps | search:searchStr.value"
+    [ngClass]="('All' == categoryFilter) ? '' : ((categoryFilter != app.category) ? 'clsHideElement' : '')">
+    <mat-card class="clsCustomPaddingForMatCard" *ngIf="categoryFilter === app.category || categoryFilter === 'All'" [@enterAnimation]>
+      <mat-card-title>{{app.title|translate}}</mat-card-title>
+      <hr>
+      <img mat-card-image src="assets/images/apps/{{app.image}}" height="225px">
+      <mat-card-content class="clsCustomAppCardContent">
+        <button mat-fab mat-fab-card-float color="warn" title="{{'Add'|translate}}" (click)="addApp(app)">
+          <mat-icon>add</mat-icon>
+        </button>
+        <p class="mb-1 clsTruncateText">{{app.description | truncate : 120 | translate}}</p>
+      </mat-card-content>
+      <hr>
+      <mat-card-actions>
+        <div fxLayout="row">
+          <button mat-icon-button title="{{'License' |translate}}">
+            <mat-icon>chrome_reader_mode</mat-icon>
+          </button>
+          <span fxFlex></span>
+          <button mat-button title="{{'More info' |translate}}" (click)="open(app)">{{'More info' |translate}}</button>
+        </div>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

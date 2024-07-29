@@ -1,0 +1,54 @@
+@media all and (min-width: 1281px) and (max-width: 1600px) { 
+  .clsCustomAppCardContent{
+    min-height: 63px;
+  }   
+}
+@media all and (min-width: 1601px) and (max-width: 1920px) { 
+  .clsCustomAppCardContent{
+    min-height: 63px;
+  } 
+}
+@media all and (min-width: 481px) and (max-width: 840px) and (orientation: landscape) { 
+  .clsCustomAppCardContent{
+    min-height: 63px;
+  } 
+}
+/* desktop-small */
+@media all and (min-width: 481px) and (max-width: 840px) and (max-aspect-ratio: 4/3) { 
+  .clsCustomAppCardContent{
+    min-height: 84px;
+  }
+}
+/* desktop-medium-landscape */
+@media all and (min-width: 841px) and (max-width: 1280px) and (orientation: landscape) { 
+  .clsCustomAppCardContent{
+    min-height: 84px;
+  }
+}
+/* desktop-medium */
+@media all and (min-width: 841px) and (max-width: 1280px) and (max-aspect-ratio: 4/3) {
+  .clsCustomAppCardContent{
+      min-height: 84px;
+  }
+}
+.clsTruncateText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  line-height: 1.5;
+  max-height: 3.8rem; 
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+.clsCustomCardSubtitle .material-icons{
+  font-size: 18px;
+}
+.clsStared{
+  color: #ffc107;
+}
+.clsBorder{
+  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+}
+.clsOverviewContainer{
+  text-align: justify;
+}
